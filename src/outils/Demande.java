@@ -12,7 +12,14 @@ public class Demande {
 	}
 	public int etage() { return numEtage; }
 
-	//	MES COUILLES
+    ___
+   //  7
+  (_,_/\
+   \    \
+    \    \
+    _\    \__
+   (   \     )
+    \___\___/
 	
 	public boolean estIndefini() {
 		return (this.numEtage == null ? true : false);
