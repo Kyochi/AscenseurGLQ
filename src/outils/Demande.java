@@ -11,6 +11,7 @@ public class Demande {
 		sens = montee;
 	}
 	public int etage() { return numEtage; }
+<<<<<<< HEAD
 
 	// PLS
     .--.                                               
@@ -20,6 +21,8 @@ public class Demande {
   | \`""`__-/ .'--/   /--------\  \                       
    \\`  ///-\/   /   /---;-.    '-'                       
 jgs                (________\  \ 
+=======
+>>>>>>> 221fb0300b702fde8076be9672874f4429f42120
 	public boolean estIndefini() {
 		return (this.numEtage == null ? true : false);
 	}
