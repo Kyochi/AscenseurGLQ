@@ -12,7 +12,14 @@ public class Demande {
 	}
 	public int etage() { return numEtage; }
 
-
+	// PLS
+    .--.                                               
+   / _(c\   .-.     __                                    
+  | / /  '-;   \'-'`  `\______                            
+  \_\/'/ __/ )  /  )   |      \--,                        
+  | \`""`__-/ .'--/   /--------\  \                       
+   \\`  ///-\/   /   /---;-.    '-'                       
+jgs                (________\  \ 
 	public boolean estIndefini() {
 		return (this.numEtage == null ? true : false);
 	}
