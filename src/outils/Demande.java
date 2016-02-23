@@ -11,7 +11,7 @@ public class Demande {
 		sens = montee;
 	}
 	public int etage() { return numEtage; }
-	
+
 	public boolean estIndefini() {
 		return (this.numEtage == null ? true : false);
 	}
