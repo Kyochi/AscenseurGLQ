@@ -13,12 +13,15 @@ public class Demande {
 	public int etage() { return numEtage; }
 
 	public boolean estIndefini() {
-		return (this.numEtage == null ? true : false);
+		return (Sens.INDEFINI == sens) ? true : false;
 	}
 	public boolean enMontee() {
 		return (Sens.MONTEE == sens) ? true : false;
 	}
 	public boolean enDescente() {
 		return (Sens.DESCENTE == sens) ? true : false;
+	}
+	public void passeEtageSuivant() {
+		numEtage++;
 	}
 }
