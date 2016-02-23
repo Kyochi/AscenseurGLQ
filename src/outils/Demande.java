@@ -12,7 +12,7 @@ public class Demande {
 	}
 	public int etage() { return numEtage; }
 
-	
+	//	MES COUILLES
 	
 	public boolean estIndefini() {
 		return (this.numEtage == null ? true : false);
