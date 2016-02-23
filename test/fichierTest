@@ -1,0 +1,43 @@
+/* Utilisateur au RdC (1), Ascenseur au 2, va en 4 */
+----------------------------------------------------- (cabine en 2)
+appel  1M -------------------------------------------
+allumer bouton 1M
+descendre
+arrêter prochain étage
+signal de franchissement de palier ------------------ (cabine en 1)
+éteindre bouton 1M
+appel 4C -------------------------------------------- (utilisateur)
+allumer bouton 4C
+monter
+signal de franchissement de palier ------------------ (cabine en 2)
+signal de franchissement de palier ------------------ (cabine en 3)
+arrêter prochain étage
+signal de franchissement de palier ------------------ (cabine en 4)
+éteindre bouton 4C
+
+/* Utilisateur1 au RdC (1) puis u2 au 2 , Ascenseur au 2, va en 4 puis au 5*/
+----------------------------------------------------- (cabine en 2)
+appel  1M -------------------------------------------
+allumer bouton 1M
+descendre
+arrêter prochain étage
+signal de franchissement de palier ------------------ (cabine en 1)
+éteindre bouton 1M
+appel 4C -------------------------------------------- (utilisateur)
+allumer bouton 4C
+appel  1M -------------------------------------------
+allumer bouton 1M
+monter
+arrêt prochain etage
+signal de franchissement de palier ------------------ (cabine en 2)
+éteindre bouton 1M
+appel 5C -------------------------------------------- (cabine en 2)
+monter
+signal de franchissement de palier ------------------ (cabine en 3)
+arrêter prochain étage
+signal de franchissement de palier ------------------ (cabine en 4)
+éteindre bouton 4C
+monter
+arrêt prochain étage
+signal de franchissement de palier ------------------ (cabine en 5)
+éteindre bouton 5C
