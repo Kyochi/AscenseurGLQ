@@ -1,19 +1,27 @@
 package commande;
 
-public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
-	public ListeTrieeCirculaireDeDemandes(int i) {
+import java.util.ArrayList;
 
+import javax.management.relation.RelationServiceNotRegisteredException;
+
+import outils.Demande;
+
+public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
+	private Demande[] listeDemande;
+	private int ind;
+	public ListeTrieeCirculaireDeDemandes(int i) {
+		listeDemande = new Demande[i-1];
+		ind = 0;
 	}
 
 	@Override
 	public int taille() {
-		// TODO Auto-generated method stub
-		return 0;
+		return listeDemande.length;
 	}
+
 	@Override
 	public boolean estVide() {
-		// TODO Auto-generated method stub
-		return false;
+		return (ind == 0) ? true : false;
 	}
 
 	@Override
@@ -30,8 +38,10 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	@Override
 	public void inserer(Object e) {
-		// TODO Auto-generated method stub
-		
+		if(ind < listeDemande.length){
+			listeDemande[ind] = (Demande)e;
+			ind++;
+		}
 	}
 
 	@Override
@@ -44,5 +54,15 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	public Object suivantDe(Object courant) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String toString(){
+		String phrase="[";
+		for(int i = 0; i< ind; i++){			
+			phrase += listeDemande[i].toString();
+			if(i != ind-1) phrase += ",";
+		}
+		System.out.println(phrase + "]");
+		return phrase + "]";
 	}
 }
