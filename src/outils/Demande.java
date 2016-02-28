@@ -66,7 +66,6 @@ public class Demande {
 		if(sens == Sens.MONTEE) this.numEtage++;
 		else this.numEtage--;;		
 	}
-
 	/**
 	 * Retourne le sens
 	 * @return le Sens 

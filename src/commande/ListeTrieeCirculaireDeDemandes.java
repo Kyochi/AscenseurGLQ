@@ -10,7 +10,6 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	@Override
 	public boolean estVide() {
 		// TODO Auto-generated method stub
