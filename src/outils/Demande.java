@@ -58,4 +58,27 @@ public class Demande {
 	public boolean enDescente() {
 		return (Sens.DESCENTE == sens) ? true : false;
 	}
+
+	/**
+	 * Passe d'un étage à un autre, selon le sens augmente ou diminu le numéro de l'étage
+	 */
+	public void passeEtageSuivant() {
+		if(sens == Sens.MONTEE) this.numEtage++;
+		else this.numEtage--;;		
+	}
+
+	/**
+	 * Retourne le sens
+	 * @return le Sens 
+	 */
+	public Sens sens() {
+		return this.sens;
+	}
+	/**
+	 * Change le sens dans lequel va l'ascenseur
+	 * @param s représente le sens
+	 */
+	public void changeSens(Sens s) {
+		this.sens = s;
+	}
 }
