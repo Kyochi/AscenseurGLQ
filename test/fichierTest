@@ -93,3 +93,80 @@ descendre
 arrêter prochain étage
 signal de franchissement de palier ---------------------------------- (cabine en 7)
 éteindre bouton 7C
+
+//deux appels à partir du même palier
+
+--------------------------------------------------------------------------------- (cabine en 4)
+appel 2M -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 2M
+descendre
+appel 2M -------------------------------------------------------------------- (utilisateur 2)
+signal de franchissement de palier ---------------------------------- (cabine en 3)
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 2)
+éteindre bouton 2M
+
+//deux appels pour le même étage
+--------------------------------------------------------------------------------- (cabine en 5)
+appel 2M -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 2M
+descendre
+appel 3M -------------------------------------------------------------------- (utilisateur 2)
+allumer bouton 3M
+signal de franchissement de palier ---------------------------------- (cabine en 4)
+signal de franchissement de palier ---------------------------------- (cabine en 3)
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 2)
+éteindre bouton 2M
+appel 4C -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 4C
+monter
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 3)
+éteindre bouton 3M
+appel 4C -------------------------------------------------------------------- (utilisateur 2)
+monter
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 4)
+éteindre bouton 4C
+
+//les arrêts d'urgence
+--------------------------------------------------------------------------------- (cabine en 3)
+appel 2M -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 2M
+descendre
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 2)
+éteindre bouton 2M
+appel 4C -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 4C
+monter
+signal de franchissement de palier ---------------------------------- (cabine en 3)
+appel 5M -------------------------------------------------------------------- (utilisateur 2)
+allumer bouton 5M
+arrêt urgence --------------------------------------------------------------- (utilisateur 1)
+éteindre boutons 4C et 5M
+
+//la reprise après arrêt d'urgence
+--------------------------------------------------------------------------------- (cabine en 3)
+appel 2M -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 2M
+descendre
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 2)
+éteindre bouton 2M
+appel 4C -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 4C
+monter
+signal de franchissement de palier ---------------------------------- (cabine en 3)
+arrêt urgence --------------------------------------------------------------- (utilisateur 1)
+éteindre boutons 4C 
+appel 4C -------------------------------------------------------------------- (utilisateur 1)
+allumer bouton 4C
+monter
+arrêter prochain étage
+signal de franchissement de palier ---------------------------------- (cabine en 4)
+éteindre bouton 4C
+
+
+
