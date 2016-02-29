@@ -55,7 +55,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	/**
 	 * Indique si la listeCirculaire contien l'objet passé en paramètre
-	 * @Param e représente un Object
+	 * @param e représente un Object
 	 * @return true si la listeCirculaire contient l'objet passé en paramètre
 	 */
 	@Override
@@ -65,7 +65,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	/**
 	 * Méthode qui insère un objet dans la listeCirculaire
-	 * @Param e représente un object
+	 * @param e représente un object
 	 */
 	@Override
 	public void inserer(Object e) {
@@ -92,7 +92,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	/**
 	 * Méthode qui permet de suprimer un Objet de la listeCirculaire
-	 * @Param e représente un object
+	 * @param e représente un object
 	 */
 	@Override
 	public void supprimer(Object e) {
@@ -104,7 +104,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	/**
 	 * Méthode qui renvoi l'objet suivant de l'objet passé en paramètre
-	 * @Param courant représente un Object (ou l'on va chercher sont suivant)
+	 * @param courant représente un Object (ou l'on va chercher sont suivant)
 	 * @return Object représentant l'objet suivant de celui passé en paramètre
 	 */
 	@Override

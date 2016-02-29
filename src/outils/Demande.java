@@ -62,7 +62,7 @@ public class Demande {
 
 	/**
 	 * Passe d'un étage à un autre, selon le sens augmente ou diminu le numéro de l'étage
-	 * @throws ExceptionCabineArretee 
+	 * @throws ExceptionCabineArretee se déclenche si la cabine est arrêté
 	 */
 	public void passeEtageSuivant() throws ExceptionCabineArretee {
 		if(sens == Sens.INDEFINI) throw new ExceptionCabineArretee();

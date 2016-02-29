@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import outils.Demande;
 
 /**
- * La classe CircularList<Demande> extends de ArrayList<Demande>
+ * La classe CircularList extends de ArrayList
  * @author Marjorie
- *
- * @param <Demande>
+ * @param <Demande> est une Demande
  */
 public class CircularList<Demande> extends ArrayList<Demande> {
 	
@@ -24,7 +23,7 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 
 	/**
 	 * Affecte la capacité passé en paramètre
-	 * @Param capacite
+	 * @param capacite
 	 */
 	private void setCapacite(int capacite) {
 		this.capacite = capacite;
@@ -32,7 +31,7 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 
 	/**
 	 * Constructeur de la classe 
-	 * @Param capacity représente la capacite de la circularList
+	 * @param capacity représente la capacite de la circularList
 	 */
 	public CircularList(int capacity) {
 		super(capacity);
@@ -41,7 +40,7 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 	
 	/**
 	 * Renvoi une Demande à l'index spécifié
-	 * @Param index 
+	 * @param index représente l'index
 	 * @return Demande
 	 */
 	public Demande get (int index) {

@@ -57,8 +57,8 @@ public interface IListeTrieeCirculaire<E> {
 	 * Recherche l'element suivant dans la liste triee circulaire,
 	 * de l'element donne en parametre. L'element donne en parametre 
 	 * n'est pas necessairement present dans la liste.
-	 * @param  l'element courant (present ou non dans la liste)
-	 * @returns l'element suivant de l'element courant dans la liste
+	 * @param courant l'element courant (present ou non dans la liste)
+	 * @return E l'element suivant de l'element courant dans la liste
 	 * ou null si la liste est vide.
 	 * 
 	 */
