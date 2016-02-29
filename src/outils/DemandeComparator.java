@@ -2,7 +2,16 @@ package outils;
 
 import java.util.Comparator;
 
+/**
+ * La classe DemandeComparator sert à comparer des Demandes
+ * @author Marjorie
+ *
+ */
 public class DemandeComparator implements Comparator<Demande> {
+	/**
+	 * Redéfinition de compare permettant de comparer 2 Demande
+	 * @return int
+	 */
     @Override
     public int compare(Demande o1, Demande o2) {
         if(o1.sens() == o2.sens() && o1.sens() == Sens.MONTEE) {

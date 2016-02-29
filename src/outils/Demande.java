@@ -97,6 +97,11 @@ public class Demande {
 		
 		return phrase;		
 	}
+	
+	/**
+	 * Redéfinition de hashCode pour Demande 
+	 * @return int représentant le HashCode de la classe Demande
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
