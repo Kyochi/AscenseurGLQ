@@ -97,6 +97,15 @@ public class Demande {
 		
 		return phrase;		
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((numEtage == null) ? 0 : numEtage.hashCode());
+		result = prime * result + ((sens == null) ? 0 : sens.hashCode());
+		return result;
+	}
+
 	/**
 	 * Redéfinition de equals pour comparer les objets
 	 * @param o représente l'objet à comparer
@@ -105,6 +114,7 @@ public class Demande {
 	public boolean equals(Object o){
 		if(o == null){return false;}
 		else if(getClass() != o.getClass()){return false;}
+		else if(hashCode() != o.hashCode()) { return false;}
 		else if((this.numEtage.equals(((Demande) o).etage()))&&(this.sens.equals(((Demande) o).sens()))) {
 			return true;
 		}else {
