@@ -22,12 +22,10 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 	}
 	
 	public Demande get (int index) {
-		int old = index;
+		System.out.println("Index : " + index + " " + this.toString());
+		if(super.size() <= 0) return null;
 		if (index < 0) index  = index + super.size();
 		if (index >= super.size()) index = super.size() - index;
-		if(super.get(old-1).equals(super.get(index))) {
-			return null;
-		}
 		return super.get(index);
 	}
 	

@@ -252,6 +252,7 @@ public class ListeTrieeCirculaireDeDemandesTest {
 	 */
 	@Test
 	public void testSuivantDe() {
+		System.out.println(suite2.toString());
 		assertNull( suite2.suivantDe(new Demande(3,Sens.MONTEE)));
 		
 		suite2.inserer( new Demande( 3, Sens.MONTEE));
@@ -293,6 +294,7 @@ public class ListeTrieeCirculaireDeDemandesTest {
 		assertEquals( suite1.toString(), "[2^,8^,8v,4v]");
 		assertEquals( new Demande(2,Sens.MONTEE), 
 				suite1.suivantDe(new Demande(0,Sens.MONTEE)));
+		System.out.println("Dernier test");
 		assertEquals( new Demande(2,Sens.MONTEE),
 				suite1.suivantDe(new Demande(2,Sens.MONTEE)));
 		assertEquals( new Demande(8,Sens.MONTEE),

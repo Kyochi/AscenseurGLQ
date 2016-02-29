@@ -71,15 +71,19 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	@Override
 	public Object suivantDe(Object courant) {
+		if(listeTrieeCirculaire.size() <= 0) return null;
 		if(listeTrieeCirculaire.contains(courant)) {
-			return listeTrieeCirculaire.get(listeTrieeCirculaire.indexOf(courant)+1);
+			System.out.println("ici");
+			return listeTrieeCirculaire.get(listeTrieeCirculaire.indexOf(courant));
 		} else {
 			ListeTrieeCirculaireDeDemandes liste = new ListeTrieeCirculaireDeDemandes(this.listeTrieeCirculaire.getCapacite());
 			for (Demande demande : listeTrieeCirculaire) {
 				liste.inserer(demande);
 			}
 			liste.inserer(courant);
-			return liste.suivantDe(courant);
+			System.out.println("icila");
+			System.out.println(courant);
+			return liste.listeTrieeCirculaire.get(liste.listeTrieeCirculaire.indexOf(courant)+1);
 		}
 	}
 	
