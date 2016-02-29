@@ -2,9 +2,13 @@ package commande;
 
 
 
+import java.util.Collections;
+
 import javax.management.relation.RelationServiceNotRegisteredException;
 
 import outils.Demande;
+import outils.DemandeComparator;
+import outils.Sens;
 
 public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	
@@ -36,19 +40,47 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	@Override
 	public void inserer(Object e) {
+		Demande d = (Demande)e;
+		if(d.sens() == Sens.INDEFINI) {
+			throw new IllegalArgumentException();
+		}
+		if(d.etage() < 0 || listeTrieeCirculaire.getCapacite() <= d.etage()) {
+			throw new IllegalArgumentException();
+		}
+		if(d.etage() == 0 && d.enDescente()) {
+			throw new IllegalArgumentException();
+		}
+		if(d.etage() == listeTrieeCirculaire.getCapacite()-1 && d.enMontee()) {
+			throw new IllegalArgumentException();
+		}
+		if(listeTrieeCirculaire.contains(e)) {
+//			throw new IllegalArgumentException();
+			return;
+		}
 		listeTrieeCirculaire.add((Demande)e);
+		Collections.sort(listeTrieeCirculaire, new DemandeComparator());
 	}
 
 	@Override
 	public void supprimer(Object e) {
-		// TODO Auto-generated method stub
-		
+		if(!listeTrieeCirculaire.contains(e)) {
+			throw new IllegalArgumentException();
+		}
+		listeTrieeCirculaire.remove(e);
 	}
 
 	@Override
 	public Object suivantDe(Object courant) {
-		// TODO Auto-generated method stub
-		return null;
+		if(listeTrieeCirculaire.contains(courant)) {
+			return listeTrieeCirculaire.get(listeTrieeCirculaire.indexOf(courant)+1);
+		} else {
+			ListeTrieeCirculaireDeDemandes liste = new ListeTrieeCirculaireDeDemandes(this.listeTrieeCirculaire.getCapacite());
+			for (Demande demande : listeTrieeCirculaire) {
+				liste.inserer(demande);
+			}
+			liste.inserer(courant);
+			return liste.suivantDe(courant);
+		}
 	}
 	
 	public String toString(){
