@@ -82,7 +82,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 		if(d.etage() == listeTrieeCirculaire.getCapacite()-1 && d.enMontee()) {
 			throw new IllegalArgumentException();
 		}
-		if(listeTrieeCirculaire.contains(e)) {
+		if(contient(e)) {
 //			throw new IllegalArgumentException();
 			return;
 		}
