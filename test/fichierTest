@@ -169,4 +169,100 @@ signal de franchissement de palier ---------------------------------- (cabine en
 éteindre bouton 4C
 
 
+// les appels de l'ascenseur après un arrêt prolongé
+-------------------------------------------------------------------------------------------------- (cabine en 0) 
+Appel 2M -------------------------------------------------------------------------------------(utilisateur 1) 
+Allumer bouton 2M 
+Monter 
+Signal de franchissement de palier ---------------------------------------------------- (cabine en 1) 
+Arrêt prochain étage 
+Signal de franchissement de palier ---------------------------------------------------- (cabine en 2) Éteindre bouton 2M 
+Appel 3C ------------------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 3C 
+Monter 
+Arrêt prochain étage 
+Signal de franchissement de palier ---------------------------------------------------- (cabine en 3)
+Éteindre bouton 3C 
+-------------------------------------------------------------------------------------------------- (cabine en 2) 
+Appel 1D ------------------------------------------------------------------------------------- (utilisateur 1) 
+Allumer 1D 
+Descendre  
+Arrêt prochain étage 
+Signal franchissement de palier -------------------------------------------------------- (cabine en 1) Éteindre bouton 1D 
+Appel 0C ------------------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 0C 
+Descendre 
+Arrêt prochain étage 
+Signal de franchissement de palier --------------------------------------------------- (cabine en 0) Éteindre bouton 0C 
+------------------------------------------------------------------------------------------------- (cabine en 1) 
+Appel 3D ------------------------------------------------------------------------------------ (utilisateur 2) 
+Allumer 3D 
+Monter 
+Signal franchissement de palier ------------------------------------------------------ (cabine en 2) 
+Arrêt prochain étage 
+Signal franchissement de palier ------------------------------------------------------ (cabine en 3) 
+Éteindre bouton 3D 
+Appel 2C ----------------------------------------------------------------------------------- (utilisateur 2) 
+Allumer bouton 2C 
+Descendre 
+Arrêt prochain étage 
+Signal de franchissement de palier ------------------------------------------------- (cabine en 2) 
+Éteindre bouton 2C 
+----------------------------------------------------------------------------------------------- (cabine en 3) 
+Appel 2M --------------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 2M 
+Descendre 
+Arrêt prochain étage 
+Signal de franchissement de palier ------------------------------------------------ (cabine en 2) Éteindre bouton 2M 
+Appel 3C --------------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 3C 
+Monter 
+Arrêt prochain étage 
+Signal de franchissement de palier ----------------------------------------------- (cabine en 3) Éteindre bouton 3C 
+--------------------------------------------------------------------------------------------- (cabine en 2) 
+Appel 4C --------------------------------------------------------------------------------- (utilisateur qui attendait) 
+Allumer bouton 4C 
+Monter 
+Signal de franchissement de palier ----------------------------------------------- (cabine en 3) 
+Arrêt prochain étage 
+Signal de franchissement de palier ----------------------------------------------- (cabine en 4) Éteindre bouton 4C 
 
+
+// les appels de l'ascenseur qui sont satisfaits sans changement de sens, ou avec un changement de
+// sens, ou avec deux changements de sens de la cabine
+---------------------------------------------------------------------------------------- (cabine en 0) 
+Appel 4D --------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 4D 
+Monter 
+Signal de franchissement de palier ------------------------------------------ (cabine en 1) 
+Appel 5D --------------------------------------------------------------------------- (utilisateur 2) 
+Allumer bouton 5D 
+Signal de franchissement de palier ------------------------------------------ (cabine en 2) Signal de franchissement de palier ------------------------------------------ (cabine en 3) 
+Arrêt prochain étage 
+Signal de franchissement de palier ------------------------------------------ (cabine en 4) 
+Éteindre bouton 4D 
+Appel 3C ---------------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 3C 
+Descendre 
+Arrêt prochain étage 
+Signal de franchissement de palier ------------------------------------------ (cabine en 3) 
+Éteindre bouton 3C 
+Monter 
+Signal de franchissement de palier ------------------------------------------ (cabine en 4) 
+Arrêt prochain étage 
+Signal de franchissement de palier ------------------------------------------ (cabine en 5) Éteindre bouton 5D 
+
+
+// un appel pour un étage en cours de service
+--------------------------------------------------------------------------------- (cabine en 3) 
+Appel 3M ------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 3M 
+Eteindre bouton 3M 
+-------------------------------------------------------------------------------- (cabine en 3) 
+Appel 3D ------------------------------------------------------------------- (utilisateur 1) 
+Allumer bouton 3D 
+Eteindre bouton 3D 
+------------------------------------------------------------------------------- (cabine en 3) 
+Appel 3C ------------------------------------------------------------------ (utilisateur 1) 
+Allumer bouton 3C 
+Eteindre bouton 3C 
