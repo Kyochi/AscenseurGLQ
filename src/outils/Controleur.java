@@ -1,7 +1,23 @@
 package outils;
 
-public class Controleur implements IControleur{
+import commande.ListeTrieeCirculaireDeDemandes;
 
+public class Controleur implements IControleur{
+	
+	private ListeTrieeCirculaireDeDemandes ListeDemande;
+	private static Controleur INSTANCE = null;
+	
+	private Controleur() {
+		ListeDemande = new ListeTrieeCirculaireDeDemandes(5);
+	}
+	
+	public static Controleur getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new Controleur();
+		}
+		return INSTANCE;
+	}
+	
 	@Override
 	public void MAJSens() {
 		// TODO Auto-generated method stub
@@ -10,7 +26,7 @@ public class Controleur implements IControleur{
 
 	@Override
 	public void stocker(Demande d) {
-		// TODO Auto-generated method stub
+		ListeDemande.inserer(d);
 		
 	}
 
