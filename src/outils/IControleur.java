@@ -35,4 +35,13 @@ public interface IControleur {
 	 * Signal le changement d'étage
 	 */
 	void signalerChangementIDEtage();
+	/**
+	 * Représente une demande
+	 * @param d représente une demande
+	 */
+	void demander(Demande d);
+	/**
+	 * arrêt d'urgence de la cabine
+	 */
+	void arretDUrgence();
 }

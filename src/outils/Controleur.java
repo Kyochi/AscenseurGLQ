@@ -50,4 +50,16 @@ public class Controleur implements IControleur{
 		
 	}
 
+	@Override
+	public void demander(Demande d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void arretDUrgence() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
