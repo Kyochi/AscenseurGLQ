@@ -25,8 +25,8 @@ public class Demande {
 	
 	/**
 	 * Constructeur de Demande avec deux paramètres, représente une demande à un étage dans un sens
-	 * @param etage, le numéro de l'étage
-	 * @param montee, le sens de monté
+	 * @param etage , le numéro de l'étage
+	 * @param montee , le sens de monté
 	 */
 	public Demande(int etage, Sens montee) {
 		numEtage = etage;
