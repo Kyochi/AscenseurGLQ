@@ -10,7 +10,7 @@ public enum Sens {
 	DESCENTE, MONTEE, INDEFINI;
 
 	/**
-	 * Méthode surcharger de toString
+	 * Redéfinition de toString
 	 * @return un string qui est le sens
 	 */
 	public String toString() {
