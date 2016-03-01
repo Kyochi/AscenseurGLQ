@@ -31,5 +31,8 @@ public interface IControleur {
 	 * @param d représente une Demande
 	 */
 	void enleverDuStock(Demande d);
-	
+	/**
+	 * Signal le changement d'étage
+	 */
+	void signalerChangementIDEtage();
 }

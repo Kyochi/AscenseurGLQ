@@ -44,4 +44,10 @@ public class Controleur implements IControleur{
 		
 	}
 
+	@Override
+	public void signalerChangementIDEtage() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
