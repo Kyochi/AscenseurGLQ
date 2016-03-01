@@ -49,8 +49,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	 */
 	@Override
 	public void vider() {
-		listeTrieeCirculaire.removeAll(listeTrieeCirculaire);
-		
+		listeTrieeCirculaire.clear();
 	}
 
 	/**

@@ -98,28 +98,29 @@ public class Demande {
 		return phrase;		
 	}
 	
-//	/**
-//	 * Redéfinition de hashCode pour Demande 
-//	 * @return int représentant le HashCode de la classe Demande
-//	 */
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((numEtage == null) ? 0 : numEtage.hashCode());
-//		result = prime * result + ((sens == null) ? 0 : sens.hashCode());
-//		return result;
-//	}
+	/**
+	 * Redéfinition de hashCode pour Demande 
+	 * @return int représentant le HashCode de la classe Demande
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((numEtage == null) ? 0 : numEtage.hashCode());
+		result = prime * result + ((sens == null) ? 0 : sens.hashCode());
+		return result;
+	}
 
 	/**
 	 * Redéfinition de equals pour comparer les objets
 	 * @param o représente l'objet à comparer
 	 * @return true si l'objet de la classe est égale à celui passé en paramètre et faux sinon
 	 */
+	@Override
 	public boolean equals(Object o){
 		if(o == null){return false;}
 		else if(getClass() != o.getClass()){return false;}
-//		else if(hashCode() != o.hashCode()) { return false;}
+		else if(hashCode() != o.hashCode()) { return false;}
 		else if((this.numEtage.equals(((Demande) o).etage()))&&(this.sens.equals(((Demande) o).sens()))) {
 			return true;
 		} else {

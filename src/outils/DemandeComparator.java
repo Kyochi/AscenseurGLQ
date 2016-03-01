@@ -1,5 +1,6 @@
 package outils;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -7,7 +8,12 @@ import java.util.Comparator;
  * @author Marjorie
  *
  */
-public class DemandeComparator implements Comparator<Demande> {
+public class DemandeComparator implements Comparator<Demande>, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Redéfinition de compare permettant de comparer 2 Demande
 	 * @return int

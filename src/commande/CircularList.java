@@ -58,7 +58,7 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 	public String toString() {
 		String retour = "[";
 		for (Demande demande : this) {
-			retour += demande.toString()+",";
+			retour = retour.concat(demande.toString()+",");
 		}
 		retour += "]";
 		return retour.replace(",]","]");
