@@ -25,7 +25,7 @@ public interface IControleur {
 	/**
 	 * renvoie la demande du stock qui vérifie certaines conditions par rapport à la position et au sens ou au sensPrecedent
 	 */
-	void interrogerStock();
+	Demande interrogerStock(Demande courant);
 	/**
 	 * enlève la demande du stock
 	 * @param d représente une Demande

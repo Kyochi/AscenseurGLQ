@@ -17,7 +17,7 @@ import outils.Sens;
 public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
 	private CircularList<Demande> listeTrieeCirculaire;
-	
+
 	/**
 	 * Constructeur permettant d'initialiser la listeCirculaire avec la capacite
 	 * @param capacite représente le nombre de pallier
