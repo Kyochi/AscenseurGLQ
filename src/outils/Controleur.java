@@ -44,7 +44,20 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void stocker(Demande d) {
+		if (d.estIndefini()) {
+			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() > position)) {
+				d.changeSens(Sens.MONTEE);
+			} else if(((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() < position)){
+				d.changeSens(Sens.DESCENTE);
+			}
+		}
 		ListeDemande.inserer(d);
+		if(iug != null){
+			if(position == d.etage()){
+				enleverDuStock(d);
+				iug.eteindreBouton(d);
+			}
+		}
 	}
 
 	/**
@@ -141,9 +154,9 @@ public class Controleur implements IControleur {
 			} else {
 				// if (((d.etage() != position) || (d.sens() != sensPrecedent))
 				// || ((d.etage() != position + 1) || (d.sens() != sens))) {
-				//if(d.etage() != position)
-				//if(Math.abs(d.etage() - position) == 1)
-				//A OPTIMISER MAIS CA DEVRAIT FONCTIONNER
+				// if(d.etage() != position)
+				// if(Math.abs(d.etage() - position) == 1)
+				// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER
 				stocker(d);
 				iug.allumerBouton(d);
 			}
@@ -152,9 +165,10 @@ public class Controleur implements IControleur {
 
 	@Override
 	public void arretDUrgence() {
-		//A OPTIMISER MAIS CA DEVRAIT FONCTIONNER:
-		//Si la cabine est arretée on ne fais que viderStock() et eteindreTousBoutons();
-		if(!ListeDemande.estVide()) {
+		// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER:
+		// Si la cabine est arretée on ne fais que viderStock() et
+		// eteindreTousBoutons();
+		if (!ListeDemande.estVide()) {
 			viderStock();
 			eteindreTousBoutons();
 			cabine.arreter();
