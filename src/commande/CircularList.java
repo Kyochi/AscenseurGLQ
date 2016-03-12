@@ -44,7 +44,6 @@ public class CircularList<Demande> extends ArrayList<Demande> {
 	 * @return Demande
 	 */
 	public Demande get (int index) {
-		System.out.println("Index : " + index + " " + this.toString());
 //		if(super.size() <= 0) return null;
 //		if (index < 0) index  = index + super.size();
 		if (index >= super.size()) index = super.size() - index;

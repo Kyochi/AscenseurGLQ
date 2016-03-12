@@ -1,25 +1,31 @@
 package outils;
 
+import static org.junit.Assert.assertSame;
+
+import javax.swing.text.Position;
+
 import commande.ListeTrieeCirculaireDeDemandes;
 
 public class Controleur implements IControleur {
-	private int nombreEtages = 5;
+	private int nombreEtages;
 	private int position;
 	private Sens sens;// les 3
 	private Sens sensPrecedent;// sens en monté ou en descente
 	private Demande demande;
 	private ListeTrieeCirculaireDeDemandes ListeDemande;
-	private static Controleur INSTANCE = null;
-	private IIUG iug = null;
-	private ICabine cabine = null;
+	public static Controleur INSTANCE = null;
+	private DoublureDeIUG iug = new DoublureDeIUG();
+	private DoublureDeCabine cabine = new DoublureDeCabine();
 
-	private Controleur() {
-		ListeDemande = new ListeTrieeCirculaireDeDemandes(nombreEtages);
+	private Controleur(int nbEtage, int posCabine) {
+		ListeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
+		sens = Sens.INDEFINI;
+		position = posCabine;
 	}
 
-	public static Controleur getInstance() {
+	public static Controleur getInstance(int nbEtage, int posCabine) {
 		if (INSTANCE == null) {
-			INSTANCE = new Controleur();
+			INSTANCE = new Controleur(nbEtage,posCabine);
 		}
 		return INSTANCE;
 	}
@@ -30,12 +36,19 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void MAJSens() {
-		sensPrecedent = sens;
-		if (ListeDemande.estVide()) {
-			sens = Sens.INDEFINI;
+		sensPrecedent=sens;
+		if (getListeDemande().estVide()) {
+			sens=Sens.INDEFINI;
 		} else {
-			Demande d = (Demande) ListeDemande.suivantDe(demande);
-			sens = d.sens();
+			Demande d = demande;
+			if((Demande)ListeDemande.suivantDe(demande) != null){
+				d = (Demande)ListeDemande.suivantDe(demande);				
+			}
+			if(d.etage() > position){
+				sens=Sens.MONTEE;
+			}else{
+				sens=Sens.DESCENTE;
+			}
 		}
 	}
 
@@ -45,15 +58,21 @@ public class Controleur implements IControleur {
 	@Override
 	public void stocker(Demande d) {
 		if (d.estIndefini()) {
-			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() > position)) {
+			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() > getPosition())) {
 				d.changeSens(Sens.MONTEE);
-			} else if(((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() < position)){
+			} else if(((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() < getPosition())){
 				d.changeSens(Sens.DESCENTE);
+			}else{
+				if(d.etage() > getPosition()){
+					d.changeSens(Sens.MONTEE);
+				}else{
+					d.changeSens(Sens.DESCENTE);
+				}
 			}
 		}
-		ListeDemande.inserer(d);
+		getListeDemande().inserer(d);
 		if(iug != null){
-			if(position == d.etage()){
+			if(getPosition() == d.etage()){
 				enleverDuStock(d);
 				iug.eteindreBouton(d);
 			}
@@ -67,9 +86,9 @@ public class Controleur implements IControleur {
 	@Override
 	public void MAJPosition() {
 		if (sens == Sens.MONTEE) {
-			position++;
+			position= position + 1;
 		} else if (sens == Sens.DESCENTE) {
-			position--;
+			position = position - 1;
 		}
 	}
 
@@ -78,7 +97,7 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void viderStock() {
-		ListeDemande.vider();
+		getListeDemande().vider();
 	}
 
 	/**
@@ -87,8 +106,15 @@ public class Controleur implements IControleur {
 	@Override
 	public void eteindreTousBoutons() {
 		if (iug != null) {
-			for (int etage = 0; etage < nombreEtages; etage++) {
-				iug.eteindreBouton(new Demande(etage, Sens.INDEFINI));
+			if(!ListeDemande.estVide()){
+				iug.eteindreBouton(demande);
+				enleverDuStock(demande);
+				while(!ListeDemande.estVide()){
+					Demande uneDmd = interrogerStock();
+					iug.eteindreBouton(uneDmd);
+					demande = uneDmd;
+					enleverDuStock(uneDmd);
+				}
 			}
 		}
 	}
@@ -98,8 +124,8 @@ public class Controleur implements IControleur {
 	 * à la position et au sens ou au sensPrecedent
 	 */
 	@Override
-	public Demande interrogerStock(Demande d) {
-		return (Demande) ListeDemande.suivantDe(d);
+	public Demande interrogerStock() {
+		return (Demande) getListeDemande().suivantDe(demande);
 	}
 
 	/**
@@ -107,7 +133,7 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void enleverDuStock(Demande d) {
-		ListeDemande.supprimer(d);
+		getListeDemande().supprimer(d);
 	}
 
 	/**
@@ -115,15 +141,32 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void signalerChangementIDEtage() {
-		if (cabine != null) {
-			Demande d = (Demande) ListeDemande.suivantDe(demande);
-			// Si il est en montée ou en descente et que son étage est
-			// strictement le suivant, la cabine s'arrête au suivant
-			if (((d.sens() == sens.MONTEE) && (d.etage() == position + 1))
-					|| ((d.sens() == sens.DESCENTE) && (d.etage() == position - 1))) {
-				cabine.arreterProchainNiveau();
+		if (cabine != null && iug != null) {
+			Demande d;
+			if((Demande)ListeDemande.suivantDe(demande) != null)
+			{
+				d = (Demande)ListeDemande.suivantDe(demande);
+			}else {
+				d = this.demande;
 			}
-			MAJPosition();
+			while(position != d.etage()){
+				// Si il est en montée ou en descente et que son étage est
+				// strictement le suivant, la cabine s'arrête au suivant
+				if (((sens == Sens.MONTEE) && (d.etage() == position + 1))
+						|| ((sens == Sens.DESCENTE) && (d.etage() == position - 1))) {
+					cabine.arreterProchainNiveau();
+					enleverDuStock(d);				
+				}
+				MAJPosition();
+				System.out.println("signal de franchissement de palier");
+			}
+			iug.eteindreBouton(d);
+			// Met le sens de la cabine à indéfini si il n'y a plus de demande
+			// et le sens précèdent avec le sens
+			if(ListeDemande.estVide()){
+				sensPrecedent = sens;
+				sens = Sens.INDEFINI;
+			}
 		}
 	}
 
@@ -132,33 +175,34 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void demander(Demande d) {
+		demande = d;
+		System.out.println("appel " +d);
 		if (iug != null && cabine != null) {
+			iug.allumerBouton(d);
 			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
-			if (ListeDemande.estVide()) {
-				if (d.etage() > position) {
+			if (getListeDemande().estVide()) {
+				stocker(d);
+				MAJSens();
+				if (d.etage() > getPosition()) {
 					cabine.monter();
-				} else if (d.etage() < position) {
+				} else if (d.etage() < getPosition()) {
 					cabine.descendre();
 				}
-				MAJSens();
 				// si l'étage demandé est le suivant de la position actuel
-				if (Math.abs(d.etage() - position) == 1) {
+				if (Math.abs(d.etage() - getPosition()) == 1) {
 					// Vu que l'étage demandé est le suivant stric de la
 					// position actuel
 					// on s'arret au prochain étage
-					cabine.arreterProchainNiveau();
-				} else {
-					stocker(d);
-				}
-				iug.allumerBouton(d);
+					cabine.arreterProchainNiveau();			
+				} 
 			} else {
 				// if (((d.etage() != position) || (d.sens() != sensPrecedent))
 				// || ((d.etage() != position + 1) || (d.sens() != sens))) {
 				// if(d.etage() != position)
 				// if(Math.abs(d.etage() - position) == 1)
 				// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER
-				stocker(d);
 				iug.allumerBouton(d);
+				stocker(d);
 			}
 		}
 	}
@@ -168,12 +212,21 @@ public class Controleur implements IControleur {
 		// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER:
 		// Si la cabine est arretée on ne fais que viderStock() et
 		// eteindreTousBoutons();
-		if (!ListeDemande.estVide()) {
+		if (!getListeDemande().estVide()) {
 			viderStock();
 			eteindreTousBoutons();
 			cabine.arreter();
 			MAJSens();
 		}
 	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public ListeTrieeCirculaireDeDemandes getListeDemande() {
+		return ListeDemande;
+	}
+
 
 }

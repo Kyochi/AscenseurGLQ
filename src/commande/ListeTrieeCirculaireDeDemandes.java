@@ -110,7 +110,6 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	public Object suivantDe(Object courant) {
 		if(listeTrieeCirculaire.size() <= 0) return null;
 		if(listeTrieeCirculaire.contains(courant)) {
-			System.out.println("ici");
 			return listeTrieeCirculaire.get(listeTrieeCirculaire.indexOf(courant));
 		} else {
 			ListeTrieeCirculaireDeDemandes liste = new ListeTrieeCirculaireDeDemandes(this.listeTrieeCirculaire.getCapacite());
@@ -118,8 +117,6 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 				liste.inserer(demande);
 			}
 			liste.inserer(courant);
-			System.out.println("icila");
-			System.out.println(courant);
 			return liste.listeTrieeCirculaire.get(liste.listeTrieeCirculaire.indexOf(courant)+1);
 		}
 	}
