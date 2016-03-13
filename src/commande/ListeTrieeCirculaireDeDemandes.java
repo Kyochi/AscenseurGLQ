@@ -120,7 +120,6 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 			return liste.listeTrieeCirculaire.get(liste.listeTrieeCirculaire.indexOf(courant)+1);
 		}
 	}
-	
 	/**
 	 * Redéfinition de la méthode toString 
 	 * @return String 

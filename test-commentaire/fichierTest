@@ -65,7 +65,7 @@ arrêter prochain étage
 signal de franchissement de palier ---------------------------------- (cabine en 2)
 éteindre bouton 2C
 
-/*Cabine en 6 va en 7*/
+/*Cabine en 6 monte et redescend*/
 --------------------------------------------------------------------- (cabine en 6)
 appel 10D ----------------------------------------------------------- (utilisateur 1)
 allumer bouton 10D

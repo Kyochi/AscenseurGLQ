@@ -103,12 +103,12 @@ public class ControleurTest {
 		//test interédiaire pour amener la cabine là ou les prochain test indique
 		//ou elledervait être
 		ctrl.demander(new Demande(10, Sens.INDEFINI));
-		ctrl.signalerChangementIDEtage();
-		ctrl.signalerChangementIDEtage();
-		ctrl.signalerChangementIDEtage();
-		ctrl.signalerChangementIDEtage();
-		ctrl.signalerChangementIDEtage();
-		ctrl.signalerChangementIDEtage();
+		ctrl.signalerChangementIDEtage();//5
+		ctrl.signalerChangementIDEtage();//6
+		ctrl.signalerChangementIDEtage();//7
+		ctrl.signalerChangementIDEtage();//8
+		ctrl.signalerChangementIDEtage();//9
+		ctrl.signalerChangementIDEtage();//10
 		assertSame(10,ctrl.getPosition());
 		dernierAffichage();
 		
@@ -150,7 +150,7 @@ public class ControleurTest {
 	}
 
 	/**
-	 * Cabine en 6
+	 * Cabine en 6 monte en 10 et redescend en 7
 	 */
 	@Test
 	public void test4() {
@@ -203,5 +203,81 @@ public class ControleurTest {
 			"eteindre bouton 7v" + lineSeparator
 			,dernierAffichage()
 		);
+	}
+
+	/**
+	 * deux appels à partir du même palier (palier 2) (cabine en 4)
+	 */
+	@Test
+	public void test5(){
+		//cabine en 7
+		ctrl.demander(new Demande(4, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 6
+		ctrl.signalerChangementIDEtage();//Cabine en 5
+		ctrl.signalerChangementIDEtage();//Cabine en 4
+		assertSame(4,ctrl.getPosition());
+		dernierAffichage();
+		
+		ctrl.demander(new Demande(2, Sens.MONTEE));
+		ctrl.demander(new Demande(2, Sens.MONTEE));
+		ctrl.signalerChangementIDEtage();//Cabine en 3
+		ctrl.signalerChangementIDEtage();//Cabine en 2
+		assertEquals(
+				"appel 2^"+ lineSeparator + 
+				"allumer bouton 2^"+ lineSeparator + 
+				desc+ lineSeparator + 
+				"appel 2^"+ lineSeparator + 
+				signalPal+ lineSeparator + 
+				arretPEtg+ lineSeparator + 
+				signalPal+ lineSeparator + 
+				"eteindre bouton 2^"+ lineSeparator 
+				,dernierAffichage());
+	}
+
+	/**
+	 * deux appels pour le même étage(cabine en 5)
+	 */
+	@Test
+	public void test6(){
+		//cabine en 2
+		ctrl.demander(new Demande(5, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 3
+		ctrl.signalerChangementIDEtage();//Cabine en 4
+		ctrl.signalerChangementIDEtage();//Cabine en 5
+		assertSame(5,ctrl.getPosition());
+		dernierAffichage();
+		
+		ctrl.demander(new Demande(2, Sens.MONTEE));
+		ctrl.demander(new Demande(3, Sens.MONTEE));
+		ctrl.signalerChangementIDEtage();//Cabine en 4
+		ctrl.signalerChangementIDEtage();//Cabine en 3
+		ctrl.signalerChangementIDEtage();//Cabine en 2
+		ctrl.demander(new Demande(4, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 3
+		ctrl.demander(new Demande(4, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 4
+		assertEquals(
+				"appel 2^" + lineSeparator + 
+				"allumer bouton 2^" + lineSeparator + 
+				desc + lineSeparator + 
+				"appel 3^" + lineSeparator + 
+				"allumer bouton 3^" + lineSeparator + 
+				signalPal + lineSeparator + 
+				signalPal + lineSeparator + 
+				arretPEtg + lineSeparator + 
+				signalPal + lineSeparator + 
+				"eteindre bouton 2^" + lineSeparator + 
+				"appel 4-" + lineSeparator + 
+				"allumer bouton 4-" + lineSeparator + 
+				monter + lineSeparator + 
+				arretPEtg + lineSeparator + 
+				signalPal + lineSeparator + 
+				"eteindre bouton 3^" + lineSeparator + 
+				"appel 4-" + lineSeparator + 
+				arretPEtg + lineSeparator + 
+				signalPal + lineSeparator + 
+				"eteindre bouton 4^" + lineSeparator 
+				,dernierAffichage());
+		
 	}
 }

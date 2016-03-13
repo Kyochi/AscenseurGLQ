@@ -39,7 +39,9 @@ public class Controleur implements IControleur {
 	 */
 	@Override
 	public void MAJSens() {
-		sensPrecedent=sens;
+		if(sens != sensPrecedent){
+			sensPrecedent = sens;
+		}		
 		if (getListeDemande().estVide()) {
 			sens=Sens.INDEFINI;
 		} else {
@@ -78,6 +80,7 @@ public class Controleur implements IControleur {
 			}else if(d.etage() == 0){
 				d.changeSens(Sens.MONTEE);
 			}
+			//MAJSens();
 		}
 		getListeDemande().inserer(d);
 		if(iug != null){
@@ -154,29 +157,39 @@ public class Controleur implements IControleur {
 			if((Demande)ListeDemande.suivantDe(demande) != null)
 			{
 				d = (Demande)ListeDemande.suivantDe(demande);
-			}else {
+				if(sens == Sens.DESCENTE)
+				{
+					if(getListeDemande().taille()>1)
+					{						
+						Demande d2 = (Demande) getListeDemande().suivantDe(new Demande(demande.etage()-1,demande.sens()));
+						if((d.etage() > d2.etage()) && (position > d2.etage()) &&(d2.sens() == d.sens())){
+							d = d2;
+						}
+					}
+				}else{
+					d = (Demande)ListeDemande.suivantDe(demande);
+				}
+				
+			}else{
 				d = this.demande;
 			}
-			if(position != d.etage()){					
+			if(position != d.etage()){	
 				d = (Demande)ListeDemande.suivantDe(new Demande(this.position,this.sens));
-				// Si il est en montée ou en descente et que son étage est
-				// strictement le suivant, la cabine s'arrête au suivant
 				if (((sens == Sens.MONTEE) && (d.etage() == position + 1))
 						|| ((sens == Sens.DESCENTE) && (d.etage() == position - 1))) {
-					cabine.arreterProchainNiveau();
-					enleverDuStock(d);				
+					cabine.arreterProchainNiveau();	
+					enleverDuStock(d);
 				}
-				MAJPosition();
-				System.out.println("signal de franchissement de palier");
 			}
+			MAJPosition();
+			System.out.println("signal de franchissement de palier");
 			if(position == d.etage()){
 				iug.eteindreBouton(d);
 			}
-			
 			// Met le sens de la cabine à indéfini si il n'y a plus de demande
 			// et le sens précèdent avec le sens
 			if(ListeDemande.estVide()){
-				sensPrecedent = sens;
+				if(sens != sensPrecedent)sensPrecedent = sens;
 				sens = Sens.INDEFINI;
 			}
 		}
@@ -192,7 +205,9 @@ public class Controleur implements IControleur {
 		if (iug != null && cabine != null) {
 			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
 			if (getListeDemande().estVide()) {
-				if(d.etage() != getPosition())iug.allumerBouton(d);
+				if(d.etage() != getPosition()){
+					iug.allumerBouton(d);
+				}
 				stocker(d);
 				MAJSens();
 				if (d.etage() > getPosition()) {
@@ -200,20 +215,21 @@ public class Controleur implements IControleur {
 				} else if (d.etage() < getPosition()) {
 					cabine.descendre();
 				}
-				// si l'étage demandé est le suivant de la position actuel
-				/*if (Math.abs(d.etage() - getPosition()) == 1) {
-					// Vu que l'étage demandé est le suivant stric de la
-					// position actuel
-					// on s'arret au prochain étage
-					cabine.arreterProchainNiveau();			
-				} */
 			} else {
 				//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
 				if((!getListeDemande().contient(new Demande(d.etage(),Sens.DESCENTE)))
 						&& (!getListeDemande().contient(new Demande(d.etage(),Sens.MONTEE)))){
 					iug.allumerBouton(d);
-				}
+				}	
 				stocker(d);
+				MAJSens();
+				if(sens != sensPrecedent){
+					if (d.etage() > getPosition()) {
+						cabine.monter();
+					} else if (d.etage() < getPosition()) {
+						cabine.descendre();
+					}
+				}
 			}
 		}
 	}
