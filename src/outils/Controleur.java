@@ -16,19 +16,21 @@ public class Controleur implements IControleur {
 	private Demande demande;
 	private ListeTrieeCirculaireDeDemandes ListeDemande;
 	public static Controleur INSTANCE = null;
-	private DoublureDeIUG iug = new DoublureDeIUG();
-	private DoublureDeCabine cabine = new DoublureDeCabine();
+	private IIUG iug;
+	private ICabine cabine;
 
-	private Controleur(int nbEtage, int posCabine) {
+	private Controleur(int nbEtage, int posCabine, IIUG piug, ICabine pcabine) {
 		ListeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
 		sens = Sens.INDEFINI;
 		position = posCabine;
 		nombreEtages = nbEtage;
+		iug = piug;
+		cabine = pcabine;
 	}
 
-	public static Controleur getInstance(int nbEtage, int posCabine) {
+	public static Controleur getInstance(int nbEtage, int posCabine, IIUG piug, ICabine pcabine) {
 		if (INSTANCE == null) {
-			INSTANCE = new Controleur(nbEtage,posCabine);
+			INSTANCE = new Controleur(nbEtage,posCabine,piug,pcabine);
 		}
 		return INSTANCE;
 	}
@@ -240,9 +242,9 @@ public class Controleur implements IControleur {
 		// Si la cabine est arretée on ne fais que viderStock() et
 		// eteindreTousBoutons();
 		if (!getListeDemande().estVide()) {
-			viderStock();
-			eteindreTousBoutons();
 			cabine.arreter();
+			eteindreTousBoutons();
+			viderStock();
 			MAJSens();
 		}
 	}
