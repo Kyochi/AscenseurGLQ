@@ -4,8 +4,6 @@ package commande;
 
 import java.util.Collections;
 
-import javax.management.relation.RelationServiceNotRegisteredException;
-
 import outils.Demande;
 import outils.DemandeComparator;
 import outils.Sens;

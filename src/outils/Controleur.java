@@ -1,110 +1,160 @@
 package outils;
 
-import static org.junit.Assert.assertSame;
-
-import javax.swing.text.Position;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import commande.ListeTrieeCirculaireDeDemandes;
 
-public class Controleur implements IControleur {
+/**
+ * Classe Controleur.
+ * @author Marjorie
+ *
+ */
+public final class Controleur implements IControleur {
+	/**
+	 * Nombre d'étage.
+	 */
 	private int nombreEtages;
+	/**
+	 * Position de l'ascenseur.
+	 */
 	private int position;
-	private Sens sens;// les 3
-	private Sens sensPrecedent;// sens en monté ou en descente
+	/**
+	 * Sens de l'ascenseur.
+	 */
+	private Sens sens; // les 3
+	/**
+	 * Sens précèdent.
+	 */
+	private Sens sensPrecedent; // sens en monté ou en descente
+	/**
+	 * Demande courrante.
+	 */
 	private Demande demande;
-	private ListeTrieeCirculaireDeDemandes ListeDemande;
+	/**
+	 * Liste de demande.
+	 */
+	private ListeTrieeCirculaireDeDemandes listeDemande;
+	/**
+	 * Instance de controleur.
+	 */
 	public static Controleur INSTANCE = null;
-	private DoublureDeIUG iug = new DoublureDeIUG();
-	private DoublureDeCabine cabine = new DoublureDeCabine();
+	/**
+	 * iug.
+	 */
+	private IIUG iug;
+	/**
+	 * Cabine.
+	 */
+	private ICabine cabine;
 
-	private Controleur(int nbEtage, int posCabine) {
-		ListeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
+	/**
+	 * Constructeur de Controleur.
+	 * @param nbEtage nbetage
+	 * @param posCabine positionCabine
+	 * @param piug iug
+	 * @param pcabine cabine
+	 */
+	private Controleur(final int nbEtage, final int posCabine,
+			final IIUG piug, final ICabine pcabine) {
+		listeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
 		sens = Sens.INDEFINI;
 		position = posCabine;
 		nombreEtages = nbEtage;
+		iug = piug;
+		cabine = pcabine;
 	}
 
-	public static Controleur getInstance(int nbEtage, int posCabine) {
+	/**
+	 * Instance de controleur.
+	 * @param nbEtage nb etage
+	 * @param posCabine position cabine
+	 * @param piug iug
+	 * @param pcabine cabine
+	 * @return Controleur qui est une instance de controleur
+	 */
+	public static Controleur getInstance(final int nbEtage,
+			final int posCabine, final IIUG piug,
+			final ICabine pcabine) {
 		if (INSTANCE == null) {
-			INSTANCE = new Controleur(nbEtage,posCabine);
+			INSTANCE = new Controleur(nbEtage, posCabine,
+					piug, pcabine);
 		}
 		return INSTANCE;
 	}
 
 	/**
-	 * met sens à INDEFINI si la cabine est arrêtée, MONTEE si la cabine monte
-	 * et DESCENTE si elle descend
+	 * met sens à INDEFINI si la cabine est arrêtée,.
+	 * MONTEE si la cabine monte et DESCENTE si elle descend.
 	 */
 	@Override
 	public void MAJSens() {
-		if(sens != sensPrecedent){
+		if (sens != sensPrecedent) {
 			sensPrecedent = sens;
-		}		
+		}
 		if (getListeDemande().estVide()) {
-			sens=Sens.INDEFINI;
+			sens = Sens.INDEFINI;
 		} else {
 			Demande d = demande;
-			if((Demande)ListeDemande.suivantDe(demande) != null){
-				d = (Demande)ListeDemande.suivantDe(demande);				
+			if ((Demande) listeDemande.suivantDe(demande) != null) {
+				d = (Demande) listeDemande.suivantDe(demande);
 			}
-			if(d.etage() > position){
-				sens=Sens.MONTEE;
-			}else{
-				sens=Sens.DESCENTE;
+			if (d.etage() > position) {
+				sens = Sens.MONTEE;
+			} else {
+				sens = Sens.DESCENTE;
 			}
 		}
 	}
 
 	/**
-	 * Stocke la demande
+	 * Stocke la demande.
 	 */
 	@Override
-	public void stocker(Demande d) {
+	public void stocker(final Demande d) {
 		if (d.estIndefini()) {
-			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() > getPosition())) {
+			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE))
+					&& (d.etage() > getPosition())) {
 				d.changeSens(Sens.MONTEE);
-			} else if(((sens == Sens.MONTEE) || (sens == Sens.DESCENTE)) && (d.etage() < getPosition())){
+			} else if (((sens == Sens.MONTEE)
+					|| (sens == Sens.DESCENTE))
+					&& (d.etage() < getPosition())) {
 				d.changeSens(Sens.DESCENTE);
-			}else{
-				if(d.etage() > getPosition()){
+			} else {
+				if (d.etage() > getPosition()) {
 					d.changeSens(Sens.MONTEE);
-				}else{
+				} else {
 					d.changeSens(Sens.DESCENTE);
 				}
 			}
 			//si l'étage demandé et tout en haut ou tout en bas
-			if(d.etage() == nombreEtages-1){
+			if (d.etage() == nombreEtages - 1) {
 				d.changeSens(Sens.DESCENTE);
-			}else if(d.etage() == 0){
+			} else if (d.etage() == 0) {
 				d.changeSens(Sens.MONTEE);
 			}
 			//MAJSens();
 		}
 		getListeDemande().inserer(d);
-		if(iug != null){
-			if(getPosition() == d.etage()){
+		if (iug != null) {
+			if (getPosition() == d.etage()) {
 				enleverDuStock(d);
 			}
 		}
 	}
 
 	/**
-	 * incrémente position de 1 si sens vaut MONTEE, décrémente de 1 si sens
-	 * vaut DESCENTE
+	 * incrémente position de 1 si sens vaut MONTEE,.
+	 * décrémente de 1 si sens vaut DESCENTE.
 	 */
 	@Override
 	public void MAJPosition() {
 		if (sens == Sens.MONTEE) {
-			position= position + 1;
+			position = position + 1;
 		} else if (sens == Sens.DESCENTE) {
 			position = position - 1;
 		}
 	}
 
 	/**
-	 * Vide le stock des demandes
+	 * Vide le stock des demandes.
 	 */
 	@Override
 	public void viderStock() {
@@ -112,15 +162,15 @@ public class Controleur implements IControleur {
 	}
 
 	/**
-	 * Eteint TOUS les boutons /!\
+	 * Eteint TOUS les boutons /!\.
 	 */
 	@Override
 	public void eteindreTousBoutons() {
 		if (iug != null) {
-			if(!ListeDemande.estVide()){
+			if (!listeDemande.estVide()) {
 				iug.eteindreBouton(demande);
 				enleverDuStock(demande);
-				while(!ListeDemande.estVide()){
+				while (!listeDemande.estVide()) {
 					Demande uneDmd = interrogerStock();
 					iug.eteindreBouton(uneDmd);
 					demande = uneDmd;
@@ -131,8 +181,8 @@ public class Controleur implements IControleur {
 	}
 
 	/**
-	 * renvoie la demande du stock qui vérifie certaines conditions par rapport
-	 * à la position et au sens ou au sensPrecedent
+	 * renvoie la demande du stock qui vérifie certaines.
+	 * conditions par rapport à la position et au sens ou au sensPrecedent.
 	 */
 	@Override
 	public Demande interrogerStock() {
@@ -140,72 +190,73 @@ public class Controleur implements IControleur {
 	}
 
 	/**
-	 * Enlève la demande du stock
+	 * Enlève la demande du stock.
 	 */
 	@Override
-	public void enleverDuStock(Demande d) {
+	public void enleverDuStock(final Demande d) {
 		getListeDemande().supprimer(d);
 	}
 
 	/**
-	 * Signale le changement d'étage
+	 * Signale le changement d'étage.
 	 */
 	@Override
 	public void signalerChangementIDEtage() {
 		if (cabine != null && iug != null) {
 			Demande d;
-			if((Demande)ListeDemande.suivantDe(demande) != null)
-			{
-				d = (Demande)ListeDemande.suivantDe(demande);
-				if(sens == Sens.DESCENTE)
-				{
-					if(getListeDemande().taille()>1)
-					{						
+			if ((Demande) listeDemande.suivantDe(demande) != null) {
+				d = (Demande) listeDemande.suivantDe(demande);
+				if (sens == Sens.DESCENTE) {
+					if (getListeDemande().taille() > 1) {
 						Demande d2 = (Demande) getListeDemande().suivantDe(new Demande(demande.etage()-1,demande.sens()));
-						if((d.etage() > d2.etage()) && (position > d2.etage()) &&(d2.sens() == d.sens())){
+						if ((d.etage() > d2.etage())
+								&& (position > d2.etage())
+								&& (d2.sens() == d.sens())) {
 							d = d2;
 						}
 					}
-				}else{
-					d = (Demande)ListeDemande.suivantDe(demande);
+				} else {
+					d = (Demande) listeDemande.suivantDe(demande);
 				}
 				
-			}else{
+			} else {
 				d = this.demande;
 			}
-			if(position != d.etage()){	
-				d = (Demande)ListeDemande.suivantDe(new Demande(this.position,this.sens));
+			if (position != d.etage()) {	
+				d = (Demande)listeDemande.suivantDe(new Demande(this.position,this.sens));
 				if (((sens == Sens.MONTEE) && (d.etage() == position + 1))
 						|| ((sens == Sens.DESCENTE) && (d.etage() == position - 1))) {
-					cabine.arreterProchainNiveau();	
+					cabine.arreterProchainNiveau();
 					enleverDuStock(d);
 				}
 			}
 			MAJPosition();
 			System.out.println("signal de franchissement de palier");
-			if(position == d.etage()){
+			if (position == d.etage()) {
 				iug.eteindreBouton(d);
 			}
-			// Met le sens de la cabine à indéfini si il n'y a plus de demande
-			// et le sens précèdent avec le sens
-			if(ListeDemande.estVide()){
-				if(sens != sensPrecedent)sensPrecedent = sens;
+			// Met le sens de la cabine à indéfini si il n'y a
+			// plus de demande et le sens précèdent avec le sens
+			if (listeDemande.estVide()) {
+				if (sens != sensPrecedent) {
+					sensPrecedent = sens;
+				}
 				sens = Sens.INDEFINI;
 			}
 		}
 	}
 
 	/**
-	 * 
+	 * Demander représente une demande à un étage.
 	 */
 	@Override
-	public void demander(Demande d) {
+	public void demander(final Demande d) {
 		demande = d;
-		System.out.println("appel " +d);
+		System.out.println("appel " + d);
 		if (iug != null && cabine != null) {
 			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
 			if (getListeDemande().estVide()) {
-				if(d.etage() != getPosition()){
+				if (d.etage() != getPosition()) {
 					iug.allumerBouton(d);
 				}
 				stocker(d);
@@ -217,13 +268,13 @@ public class Controleur implements IControleur {
 				}
 			} else {
 				//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
-				if((!getListeDemande().contient(new Demande(d.etage(),Sens.DESCENTE)))
-						&& (!getListeDemande().contient(new Demande(d.etage(),Sens.MONTEE)))){
+				if ((!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
+						&& (!getListeDemande().contient(new Demande(d.etage(), Sens.MONTEE)))) {
 					iug.allumerBouton(d);
-				}	
+				}
 				stocker(d);
 				MAJSens();
-				if(sens != sensPrecedent){
+				if (sens != sensPrecedent) {
 					if (d.etage() > getPosition()) {
 						cabine.monter();
 					} else if (d.etage() < getPosition()) {
@@ -240,19 +291,27 @@ public class Controleur implements IControleur {
 		// Si la cabine est arretée on ne fais que viderStock() et
 		// eteindreTousBoutons();
 		if (!getListeDemande().estVide()) {
-			viderStock();
-			eteindreTousBoutons();
 			cabine.arreter();
+			eteindreTousBoutons();
+			viderStock();
 			MAJSens();
 		}
 	}
 
+	/**
+	 * getPosition représente la position de la cabine.
+	 * @return la position de la cabine
+	 */
 	public int getPosition() {
 		return position;
 	}
 
+	/**
+	 * getListeDemande représente la liste des demandes.
+	 * @return ListeTrieeCirculaireDeDemandes qui est la liste de demandes
+	 */
 	public ListeTrieeCirculaireDeDemandes getListeDemande() {
-		return ListeDemande;
+		return listeDemande;
 	}
 
 
