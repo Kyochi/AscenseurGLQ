@@ -58,6 +58,10 @@ public class ControleurTest {
 	public void setUp()  {
 		ctrl = Controleur.getInstance(11,2);
 	}
+	
+	/**
+	 * Utilisateur au RdC (1), Ascenseur au 2, va en 4 
+	 */
 	@Test
 	public void test1() {
 		assertSame(2,ctrl.getPosition());
@@ -91,6 +95,9 @@ public class ControleurTest {
 		);
 	}
 
+	/**
+	 * Les appels de l'ascenseur dans le même sens que celui de la cabine en cours de déplacement 
+	 */
 	@Test
 	public void test3() {
 		//test interédiaire pour amener la cabine là ou les prochain test indique
@@ -140,5 +147,61 @@ public class ControleurTest {
 				"eteindre bouton 2v"+ lineSeparator 
 				,dernierAffichage()
 			);		
+	}
+
+	/**
+	 * Cabine en 6
+	 */
+	@Test
+	public void test4() {
+		//Cabine est en 2
+		ctrl.demander(new Demande(6, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 3
+		ctrl.signalerChangementIDEtage();//Cabine en 4
+		ctrl.signalerChangementIDEtage();//Cabine en 5
+		ctrl.signalerChangementIDEtage();//Cabine en 6
+		//On s'assure que la cabine est bien en 6
+		assertSame(6,ctrl.getPosition());
+		dernierAffichage();
+		
+		ctrl.demander(new Demande(10, Sens.DESCENTE));
+		ctrl.signalerChangementIDEtage();//Cabine en 7
+		ctrl.signalerChangementIDEtage();//Cabine en 8
+		ctrl.signalerChangementIDEtage();//Cabine en 9
+		ctrl.signalerChangementIDEtage();//Cabine en 10
+		ctrl.demander(new Demande(9, Sens.INDEFINI));
+		ctrl.demander(new Demande(8, Sens.INDEFINI));
+		ctrl.demander(new Demande(7, Sens.INDEFINI));
+		ctrl.signalerChangementIDEtage();//Cabine en 9
+		ctrl.signalerChangementIDEtage();//Cabine en 8
+		ctrl.signalerChangementIDEtage();//Cabine en 7
+		assertEquals(
+			"appel 10v" + lineSeparator+
+			"allumer bouton 10v" + lineSeparator+
+			monter + lineSeparator+
+			signalPal + lineSeparator+
+			signalPal + lineSeparator+
+			signalPal + lineSeparator+
+			arretPEtg + lineSeparator+
+			signalPal + lineSeparator+
+			"eteindre bouton 10v" + lineSeparator+
+			"appel 9-" + lineSeparator+
+			"allumer bouton 9-" + lineSeparator+
+			desc + lineSeparator+
+			"appel 8-" + lineSeparator+
+			"allumer bouton 8-" + lineSeparator+
+			"appel 7-" + lineSeparator+
+			"allumer bouton 7-" + lineSeparator+
+			arretPEtg + lineSeparator+
+			signalPal + lineSeparator+
+			"eteindre bouton 9v" + lineSeparator+
+			arretPEtg + lineSeparator+
+			signalPal + lineSeparator+
+			"eteindre bouton 8v" + lineSeparator+
+			arretPEtg + lineSeparator+
+			signalPal + lineSeparator+
+			"eteindre bouton 7v" + lineSeparator
+			,dernierAffichage()
+		);
 	}
 }
