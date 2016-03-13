@@ -4,17 +4,13 @@ public class DoublureDeCabine implements ICabine{
 	@Override
 	public void monter() {
 		// TODO Auto-generated method stub
-		System.out.println("monter");
-		Controleur ctrl= Controleur.INSTANCE;
-		ctrl.signalerChangementIDEtage();
+		System.out.println("monter");		
 	}
 
 	@Override
 	public void descendre() {
 		// TODO Auto-generated method stub
 		System.out.println("descendre");
-		Controleur ctrl= Controleur.INSTANCE;
-		ctrl.signalerChangementIDEtage();
 	}
 
 	@Override

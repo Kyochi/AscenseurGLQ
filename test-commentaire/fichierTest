@@ -23,15 +23,16 @@ descendre
 arrêter prochain étage
 signal de franchissement de palier ------------------ (cabine en 1)
 éteindre bouton 1M
-appel 4C -------------------------------------------- (utilisateur)
-allumer bouton 4C
 appel  1M -------------------------------------------
 allumer bouton 1M
+appel 4C -------------------------------------------- (utilisateur)
+allumer bouton 4C
 monter
 arrêt prochain etage
 signal de franchissement de palier ------------------ (cabine en 2)
 éteindre bouton 1M
 appel 5C -------------------------------------------- (cabine en 2)
+allumer bouton 5C
 monter
 signal de franchissement de palier ------------------ (cabine en 3)
 arrêter prochain étage
@@ -59,7 +60,6 @@ arrêter prochain étage
 signal de franchissement de palier ---------------------------------- (cabine en 4)
 éteindre bouton 4D
 appel 2C ------------------------------------------------------------ (utilisateur 2)
-descendre
 signal de franchissement de palier ---------------------------------- (cabine en 3)
 arrêter prochain étage
 signal de franchissement de palier ---------------------------------- (cabine en 2)

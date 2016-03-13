@@ -4,6 +4,8 @@ import static org.junit.Assert.assertSame;
 
 import javax.swing.text.Position;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import commande.ListeTrieeCirculaireDeDemandes;
 
 public class Controleur implements IControleur {
@@ -21,6 +23,7 @@ public class Controleur implements IControleur {
 		ListeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
 		sens = Sens.INDEFINI;
 		position = posCabine;
+		nombreEtages = nbEtage;
 	}
 
 	public static Controleur getInstance(int nbEtage, int posCabine) {
@@ -69,12 +72,17 @@ public class Controleur implements IControleur {
 					d.changeSens(Sens.DESCENTE);
 				}
 			}
+			//si l'étage demandé et tout en haut ou tout en bas
+			if(d.etage() == nombreEtages-1){
+				d.changeSens(Sens.DESCENTE);
+			}else if(d.etage() == 0){
+				d.changeSens(Sens.MONTEE);
+			}
 		}
 		getListeDemande().inserer(d);
 		if(iug != null){
 			if(getPosition() == d.etage()){
 				enleverDuStock(d);
-				iug.eteindreBouton(d);
 			}
 		}
 	}
@@ -149,7 +157,8 @@ public class Controleur implements IControleur {
 			}else {
 				d = this.demande;
 			}
-			while(position != d.etage()){
+			if(position != d.etage()){					
+				d = (Demande)ListeDemande.suivantDe(new Demande(this.position,this.sens));
 				// Si il est en montée ou en descente et que son étage est
 				// strictement le suivant, la cabine s'arrête au suivant
 				if (((sens == Sens.MONTEE) && (d.etage() == position + 1))
@@ -160,7 +169,10 @@ public class Controleur implements IControleur {
 				MAJPosition();
 				System.out.println("signal de franchissement de palier");
 			}
-			iug.eteindreBouton(d);
+			if(position == d.etage()){
+				iug.eteindreBouton(d);
+			}
+			
 			// Met le sens de la cabine à indéfini si il n'y a plus de demande
 			// et le sens précèdent avec le sens
 			if(ListeDemande.estVide()){
@@ -178,9 +190,9 @@ public class Controleur implements IControleur {
 		demande = d;
 		System.out.println("appel " +d);
 		if (iug != null && cabine != null) {
-			iug.allumerBouton(d);
 			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
 			if (getListeDemande().estVide()) {
+				if(d.etage() != getPosition())iug.allumerBouton(d);
 				stocker(d);
 				MAJSens();
 				if (d.etage() > getPosition()) {
@@ -189,19 +201,18 @@ public class Controleur implements IControleur {
 					cabine.descendre();
 				}
 				// si l'étage demandé est le suivant de la position actuel
-				if (Math.abs(d.etage() - getPosition()) == 1) {
+				/*if (Math.abs(d.etage() - getPosition()) == 1) {
 					// Vu que l'étage demandé est le suivant stric de la
 					// position actuel
 					// on s'arret au prochain étage
 					cabine.arreterProchainNiveau();			
-				} 
+				} */
 			} else {
-				// if (((d.etage() != position) || (d.sens() != sensPrecedent))
-				// || ((d.etage() != position + 1) || (d.sens() != sens))) {
-				// if(d.etage() != position)
-				// if(Math.abs(d.etage() - position) == 1)
-				// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER
-				iug.allumerBouton(d);
+				//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
+				if((!getListeDemande().contient(new Demande(d.etage(),Sens.DESCENTE)))
+						&& (!getListeDemande().contient(new Demande(d.etage(),Sens.MONTEE)))){
+					iug.allumerBouton(d);
+				}
 				stocker(d);
 			}
 		}
