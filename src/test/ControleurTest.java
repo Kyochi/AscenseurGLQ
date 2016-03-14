@@ -152,13 +152,13 @@ public class ControleurTest {
 	 */
 	@Test
 	public final void cas1() {
-		assertSame(2, ctrl.getPosition());
+		assertEquals(2, ctrl.getPosition());
 		ctrl.demander(new Demande(1, Sens.MONTEE));
 		ctrl.signalerChangementIDEtage();
-		assertSame(1, new Demande(1, Sens.MONTEE).etage());
-		assertSame(true, new Demande(1, Sens.MONTEE).enMontee());
-		assertSame(1, ctrl.getPosition());
-		assertSame(true, ctrl.getListeDemande().estVide());
+		assertEquals(1, new Demande(1, Sens.MONTEE).etage());
+		assertTrue(new Demande(1, Sens.MONTEE).enMontee());
+		assertEquals(1, ctrl.getPosition());
+		assertTrue(ctrl.getListeDemande().estVide());
 		ctrl.demander(new Demande(4, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();
 		ctrl.signalerChangementIDEtage();
@@ -191,7 +191,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// 8
 		ctrl.signalerChangementIDEtage();// 9
 		ctrl.signalerChangementIDEtage();// 10
-		assertSame(10, ctrl.getPosition());
+		assertEquals(10, ctrl.getPosition());
 		dernierAffichage();
 
 		// La cabine est en 10
@@ -232,7 +232,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// Cabine en 5
 		ctrl.signalerChangementIDEtage();// Cabine en 6
 		// On s'assure que la cabine est bien en 6
-		assertSame(6, ctrl.getPosition());
+		assertEquals(6, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(10, Sens.DESCENTE));
@@ -273,7 +273,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// Cabine en 6
 		ctrl.signalerChangementIDEtage();// Cabine en 5
 		ctrl.signalerChangementIDEtage();// Cabine en 4
-		assertSame(4, ctrl.getPosition());
+		assertEquals(4, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(2, Sens.MONTEE));
@@ -297,7 +297,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// Cabine en 3
 		ctrl.signalerChangementIDEtage();// Cabine en 4
 		ctrl.signalerChangementIDEtage();// Cabine en 5
-		assertSame(5, ctrl.getPosition());
+		assertEquals(5, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(2, Sens.MONTEE));
@@ -333,7 +333,7 @@ public class ControleurTest {
 		// Cabine en 3
 		ctrl.demander(new Demande(3, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 3
-		assertSame(3, ctrl.getPosition());
+		assertEquals(3, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(2, Sens.MONTEE));
@@ -362,7 +362,7 @@ public class ControleurTest {
 	public final void cas8() {
 		// Cabine actuellement en 3
 		// Cabine en 3
-		assertSame(3, ctrl.getPosition());
+		assertEquals(3, ctrl.getPosition());
 		ctrl.demander(new Demande(2, Sens.MONTEE));
 		ctrl.signalerChangementIDEtage();
 		ctrl.demander(new Demande(4, Sens.INDEFINI));
@@ -394,7 +394,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// Cabine en 2
 		ctrl.signalerChangementIDEtage();// Cabine en 1
 		ctrl.signalerChangementIDEtage();// Cabine en 0
-		assertSame(0, ctrl.getPosition());
+		assertEquals(0, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(2, Sens.MONTEE));
@@ -413,7 +413,7 @@ public class ControleurTest {
 
 		ctrl.demander(new Demande(2, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 2
-		assertSame(2, ctrl.getPosition());
+		assertEquals(2, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(1, Sens.DESCENTE));
@@ -432,7 +432,7 @@ public class ControleurTest {
 		// Cabine en 1
 		ctrl.demander(new Demande(1, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 1
-		assertSame(1, ctrl.getPosition());
+		assertEquals(1, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(3, Sens.DESCENTE));
@@ -452,7 +452,7 @@ public class ControleurTest {
 		// Cabine en 3
 		ctrl.demander(new Demande(3, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 3
-		assertSame(3, ctrl.getPosition());
+		assertEquals(3, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(2, Sens.MONTEE));
@@ -471,7 +471,7 @@ public class ControleurTest {
 		// Cabine en 2
 		ctrl.demander(new Demande(2, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 2
-		assertSame(2, ctrl.getPosition());
+		assertEquals(2, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(4, Sens.INDEFINI));
@@ -492,7 +492,7 @@ public class ControleurTest {
 		ctrl.signalerChangementIDEtage();// Cabine en 2
 		ctrl.signalerChangementIDEtage();// Cabine en 1
 		ctrl.signalerChangementIDEtage();// Cabine en 0
-		assertSame(0, ctrl.getPosition());
+		assertEquals(0, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(4, Sens.DESCENTE));
@@ -525,7 +525,7 @@ public class ControleurTest {
 		ctrl.demander(new Demande(3, Sens.INDEFINI));
 		ctrl.signalerChangementIDEtage();// Cabine en 4
 		ctrl.signalerChangementIDEtage();// Cabine en 3
-		assertSame(3, ctrl.getPosition());
+		assertEquals(3, ctrl.getPosition());
 		dernierAffichage();
 
 		ctrl.demander(new Demande(3, Sens.MONTEE));
