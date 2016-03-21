@@ -1,4 +1,6 @@
-package outils;
+package commande;
+
+import outils.Demande;
 
 public interface IControleur {
 	/**
