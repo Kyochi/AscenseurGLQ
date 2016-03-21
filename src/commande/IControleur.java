@@ -36,7 +36,7 @@ public interface IControleur {
 	/**
 	 * Signal le changement d'étage
 	 */
-	void signalerChangementIDEtage();
+	void signalerChangementDEtage();
 	/**
 	 * Représente une demande
 	 * @param d représente une demande
@@ -45,5 +45,5 @@ public interface IControleur {
 	/**
 	 * arrêt d'urgence de la cabine
 	 */
-	void arretDUrgence();
+	void arretUrgence();
 }

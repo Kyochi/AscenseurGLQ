@@ -1,7 +1,9 @@
-package outils;
+package commande;
 
-import commande.IControleur;
-import commande.ListeTrieeCirculaireDeDemandes;
+import outils.Demande;
+import outils.ICabine;
+import outils.IIUG;
+import outils.Sens;
 
 /**
  * Classe Controleur.
@@ -16,7 +18,7 @@ public final class Controleur implements IControleur {
 	/**
 	 * Position de l'ascenseur.
 	 */
-	private int position;
+	private int position ;
 	/**
 	 * Sens de l'ascenseur.
 	 */
@@ -53,39 +55,20 @@ public final class Controleur implements IControleur {
 	 * @param piug iug
 	 * @param pcabine cabine
 	 */
-	private Controleur(final int nbEtage, final int posCabine,
-			final IIUG piug, final ICabine pcabine) {
-		listeDemande = (new ListeTrieeCirculaireDeDemandes(nbEtage));
+	public Controleur(final int nbEtage, final IIUG piug, 
+			final ICabine pcabine, final IListeTrieeCirculaire<Demande> liste) {
+		listeDemande = (ListeTrieeCirculaireDeDemandes) liste;
 		sens = Sens.INDEFINI;
-		position = posCabine;
+		position = 0;
 		nombreEtages = nbEtage;
 		iug = piug;
 		cabine = pcabine;
 	}
 
 	/**
-	 * Instance de controleur.
-	 * @param nbEtage nb etage
-	 * @param posCabine position cabine
-	 * @param piug iug
-	 * @param pcabine cabine
-	 * @return Controleur qui est une instance de controleur
-	 */
-	public static Controleur getInstance(final int nbEtage,
-			final int posCabine, final IIUG piug,
-			final ICabine pcabine) {
-		if (INSTANCE == null) {
-			INSTANCE = new Controleur(nbEtage, posCabine,
-					piug, pcabine);
-		}
-		return INSTANCE;
-	}
-
-	/**
 	 * met sens à INDEFINI si la cabine est arrêtée,.
 	 * MONTEE si la cabine monte et DESCENTE si elle descend.
 	 */
-	@Override
 	public void MAJSens() {
 		if (sens != sensPrecedent) {
 			sensPrecedent = sens;
@@ -108,7 +91,6 @@ public final class Controleur implements IControleur {
 	/**
 	 * Stocke la demande.
 	 */
-	@Override
 	public void stocker(final Demande d) {
 		if (d.estIndefini()) {
 			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE))
@@ -145,7 +127,6 @@ public final class Controleur implements IControleur {
 	 * incrémente position de 1 si sens vaut MONTEE,.
 	 * décrémente de 1 si sens vaut DESCENTE.
 	 */
-	@Override
 	public void MAJPosition() {
 		if (sens == Sens.MONTEE) {
 			position = position + 1;
@@ -157,7 +138,6 @@ public final class Controleur implements IControleur {
 	/**
 	 * Vide le stock des demandes.
 	 */
-	@Override
 	public void viderStock() {
 		getListeDemande().vider();
 	}
@@ -165,7 +145,6 @@ public final class Controleur implements IControleur {
 	/**
 	 * Eteint TOUS les boutons /!\.
 	 */
-	@Override
 	public void eteindreTousBoutons() {
 		if (iug != null) {
 			if (!listeDemande.estVide()) {
@@ -185,7 +164,6 @@ public final class Controleur implements IControleur {
 	 * renvoie la demande du stock qui vérifie certaines.
 	 * conditions par rapport à la position et au sens ou au sensPrecedent.
 	 */
-	@Override
 	public Demande interrogerStock() {
 		return (Demande) getListeDemande().suivantDe(demande);
 	}
@@ -193,7 +171,6 @@ public final class Controleur implements IControleur {
 	/**
 	 * Enlève la demande du stock.
 	 */
-	@Override
 	public void enleverDuStock(final Demande d) {
 		getListeDemande().supprimer(d);
 	}
@@ -201,8 +178,7 @@ public final class Controleur implements IControleur {
 	/**
 	 * Signale le changement d'étage.
 	 */
-	@Override
-	public void signalerChangementIDEtage() {
+	public void signalerChangementDEtage() {
 		if (cabine != null && iug != null) {
 			Demande d;
 			if ((Demande) listeDemande.suivantDe(demande) != null) {
@@ -287,7 +263,7 @@ public final class Controleur implements IControleur {
 	}
 
 	@Override
-	public void arretDUrgence() {
+	public void arretUrgence() {
 		// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER:
 		// Si la cabine est arretée on ne fais que viderStock() et
 		// eteindreTousBoutons();
@@ -314,6 +290,5 @@ public final class Controleur implements IControleur {
 	public ListeTrieeCirculaireDeDemandes getListeDemande() {
 		return listeDemande;
 	}
-
 
 }
