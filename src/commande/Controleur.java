@@ -1,9 +1,11 @@
 package commande;
 
+import static org.junit.Assert.assertEquals;
 import outils.Demande;
 import outils.ICabine;
 import outils.IIUG;
 import outils.Sens;
+import static org.junit.Assert.*;
 
 /**
  * Classe Controleur.
@@ -50,10 +52,10 @@ public final class Controleur implements IControleur {
 
 	/**
 	 * Constructeur de Controleur.
-	 * @param nbEtage nbetage
-	 * @param posCabine positionCabine
-	 * @param piug iug
-	 * @param pcabine cabine
+	 * @param nbEtage nbetage est le nombre d'étages
+	 * @param piug iug est l'iug
+	 * @param pcabine pcabine est la cabine
+	 * @param liste est la liste de demande
 	 */
 	public Controleur(final int nbEtage, final IIUG piug, 
 			final ICabine pcabine, final IListeTrieeCirculaire<Demande> liste) {
@@ -71,7 +73,9 @@ public final class Controleur implements IControleur {
 	 */
 	public void MAJSens() {
 		if (sens != sensPrecedent) {
+			assertNotEquals(sens,sensPrecedent);
 			sensPrecedent = sens;
+			assertEquals(sens,sensPrecedent);
 		}
 		if (getListeDemande().estVide()) {
 			sens = Sens.INDEFINI;
@@ -113,12 +117,13 @@ public final class Controleur implements IControleur {
 			} else if (d.etage() == 0) {
 				d.changeSens(Sens.MONTEE);
 			}
-			//MAJSens();
 		}
 		getListeDemande().inserer(d);
 		if (iug != null) {
 			if (getPosition() == d.etage()) {
+				assertTrue(listeDemande.contient(d));
 				enleverDuStock(d);
+				assertFalse(listeDemande.contient(d));
 			}
 		}
 	}
@@ -130,8 +135,10 @@ public final class Controleur implements IControleur {
 	public void MAJPosition() {
 		if (sens == Sens.MONTEE) {
 			position = position + 1;
+			assertEquals(sens, Sens.MONTEE);
 		} else if (sens == Sens.DESCENTE) {
 			position = position - 1;
+			assertEquals(sens, Sens.DESCENTE);
 		}
 	}
 
@@ -140,6 +147,7 @@ public final class Controleur implements IControleur {
 	 */
 	public void viderStock() {
 		getListeDemande().vider();
+		assertTrue(listeDemande.estVide());
 	}
 
 	/**
@@ -155,6 +163,7 @@ public final class Controleur implements IControleur {
 					iug.eteindreBouton(uneDmd);
 					demande = uneDmd;
 					enleverDuStock(uneDmd);
+					assertFalse(listeDemande.contient(uneDmd));
 				}
 			}
 		}
@@ -190,6 +199,7 @@ public final class Controleur implements IControleur {
 								&& (position > d2.etage())
 								&& (d2.sens() == d.sens())) {
 							d = d2;
+							assertEquals(d,d2);
 						}
 					}
 				} else {
@@ -215,6 +225,7 @@ public final class Controleur implements IControleur {
 			// Met le sens de la cabine à indéfini si il n'y a
 			// plus de demande et le sens précèdent avec le sens
 			if (listeDemande.estVide()) {
+				assertTrue(listeDemande.estVide());
 				if (sens != sensPrecedent) {
 					sensPrecedent = sens;
 				}
@@ -262,16 +273,17 @@ public final class Controleur implements IControleur {
 		}
 	}
 
+	/**
+	 * Méthode qui arrete la cabine vide le stock de demande et éteind tous les boutons
+	 */
 	@Override
 	public void arretUrgence() {
-		// A OPTIMISER MAIS CA DEVRAIT FONCTIONNER:
-		// Si la cabine est arretée on ne fais que viderStock() et
-		// eteindreTousBoutons();
 		if (!getListeDemande().estVide()) {
 			cabine.arreter();
 			eteindreTousBoutons();
 			viderStock();
 			MAJSens();
+			assertEquals(sens,Sens.INDEFINI);
 		}
 	}
 
