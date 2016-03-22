@@ -32,7 +32,7 @@ public interface IControleur {
      * d'un palier. Aucune indication du numero de palier franchi n'est fournie. Le 
      * controleur a la charge de calculer la position courante de la cabine.
      */
-    public void signalerChangementDEtage();
+    public void signalerChangementDEtage() throws Exception;
     
     public void exit(); // fin de l'application
 }
