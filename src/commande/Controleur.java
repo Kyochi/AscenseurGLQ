@@ -1,9 +1,9 @@
 package commande;
 
 import static org.junit.Assert.assertEquals;
+import operative.ICabine;
+import operative.IIUG;
 import outils.Demande;
-import outils.ICabine;
-import outils.IIUG;
 import outils.Sens;
 import static org.junit.Assert.*;
 
@@ -140,6 +140,7 @@ public final class Controleur implements IControleur {
 			position = position - 1;
 			assertEquals(sens, Sens.DESCENTE);
 		}
+		iug.changerPosition(position);
 	}
 
 	/**
@@ -157,10 +158,12 @@ public final class Controleur implements IControleur {
 		if (iug != null) {
 			if (!listeDemande.estVide()) {
 				iug.eteindreBouton(demande);
+				iug.eteindreBouton(new Demande(demande.etage(),Sens.INDEFINI));
 				enleverDuStock(demande);
 				while (!listeDemande.estVide()) {
 					Demande uneDmd = interrogerStock();
 					iug.eteindreBouton(uneDmd);
+					iug.eteindreBouton(new Demande(uneDmd.etage(),Sens.INDEFINI));
 					demande = uneDmd;
 					enleverDuStock(uneDmd);
 					assertFalse(listeDemande.contient(uneDmd));
@@ -187,7 +190,7 @@ public final class Controleur implements IControleur {
 	/**
 	 * Signale le changement d'étage.
 	 */
-	public void signalerChangementDEtage() {
+	public synchronized void signalerChangementDEtage() {
 		if (cabine != null && iug != null) {
 			Demande d;
 			if ((Demande) listeDemande.suivantDe(demande) != null) {
@@ -221,6 +224,7 @@ public final class Controleur implements IControleur {
 			System.out.println("signal de franchissement de palier");
 			if (position == d.etage()) {
 				iug.eteindreBouton(d);
+				iug.eteindreBouton(new Demande(d.etage(),Sens.INDEFINI));
 			}
 			// Met le sens de la cabine à indéfini si il n'y a
 			// plus de demande et le sens précèdent avec le sens
@@ -301,6 +305,12 @@ public final class Controleur implements IControleur {
 	 */
 	public ListeTrieeCirculaireDeDemandes getListeDemande() {
 		return listeDemande;
+	}
+
+	@Override
+	public void exit() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,49 +1,38 @@
+/**
+ * Classes et interfaces de la partie commande de l'ascenseur. 
+ * @author Lucile Torres-Gerardin
+ *
+ */
 package commande;
 
 import outils.Demande;
 
+/**
+ * L'interface IControleur dÃ©crit un controleur du deplacement de la cabine en reponse
+ * aux demandes de deplacement generees par l'IUG. 
+ * @author Lucile Torres-Gerardin
+ * @see Controleur
+ *
+ */
 public interface IControleur {
 	/**
-	 * met sens à INDEFINI si la cabine est arrêtée, MONTEE si la cabine monte et DESCENTE si elle descend
+	 * Methode appelee par l'IUG a chaque demande de deplacement d'un utilisateur.
+	 * @param d demande de deplacement
 	 */
-	void MAJSens();
-	/**
-	 * stocke la demande
-	 * @param d représente une Demande
-	 */
-	void stocker(Demande d);
-	/**
-	 * incrémente position de 1 si sens vaut MONTEE, décrémente de 1 si sens vaut DESCENTE
-	 */
-	void MAJPosition();
-	/**
-	 * vide le stock des demandes
-	 */
-	void viderStock();
-	/**
-	 * éteint tous les boutons
-	 */
-	void eteindreTousBoutons();
-	/**
-	 * renvoie la demande du stock qui vérifie certaines conditions par rapport à la position et au sens ou au sensPrecedent
-	 */
-	Demande interrogerStock();
-	/**
-	 * enlève la demande du stock
-	 * @param d représente une Demande
-	 */
-	void enleverDuStock(Demande d);
-	/**
-	 * Signal le changement d'étage
-	 */
-	void signalerChangementDEtage();
-	/**
-	 * Représente une demande
-	 * @param d représente une demande
-	 */
-	void demander(Demande d);
-	/**
-	 * arrêt d'urgence de la cabine
-	 */
-	void arretUrgence();
+    public void demander( Demande d);
+    
+    /**
+     * Methode appelee par l'IUG a chaque clic sur le bouton arret urgence.
+     * Un appel declenche l'arret d'urgence, le suivant l'annule.
+     */
+    public void arretUrgence();
+    
+    /**
+     * Methode appeleee par (les capteurs de) la cabine pour signaler le franchissement
+     * d'un palier. Aucune indication du numero de palier franchi n'est fournie. Le 
+     * controleur a la charge de calculer la position courante de la cabine.
+     */
+    public void signalerChangementDEtage();
+    
+    public void exit(); // fin de l'application
 }

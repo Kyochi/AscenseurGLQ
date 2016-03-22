@@ -36,7 +36,7 @@ public class Demande {
 	 * Renvoi le numéro de l'étage
 	 * @return un int représentant le numéro de l'étage
 	 */
-	public int etage() { return numEtage; }
+	public Integer etage() { return numEtage; }
 
 	/**
 	 * Retourne vrai si le sens est indefini

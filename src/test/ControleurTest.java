@@ -10,8 +10,6 @@ import commande.IControleur;
 import commande.IListeTrieeCirculaire;
 import commande.ListeTrieeCirculaireDeDemandes;
 import outils.Demande;
-import outils.ICabine;
-import outils.IIUG;
 import outils.Sens;
 
 import java.io.ByteArrayOutputStream;
@@ -82,7 +80,7 @@ public class ControleurTest {
 	 * @author Marjorie
 	 * 
 	 */
-	private class DoublureDeCabine implements ICabine {
+	private class DoublureDeCabine implements operative.ICabine {
 		public void monter() {
 			System.out.println("monter");
 		}
@@ -102,6 +100,12 @@ public class ControleurTest {
 			System.out.println("arret d'urgence");
 		}
 
+		@Override
+		public void assignerControleur(IControleur arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	}
 
 	/**
@@ -110,7 +114,7 @@ public class ControleurTest {
 	 * @author Marjorie
 	 * 
 	 */
-	private class DoublureDIUG implements IIUG {
+	private class DoublureDIUG implements operative.IIUG {
 
 		@Override
 		public void allumerBouton(final Demande d) {
@@ -134,6 +138,12 @@ public class ControleurTest {
 		public void changerPosition(final int i) {
 			// TODO Auto-generated method stub
 
+		}
+
+		@Override
+		public void assignerControleur(IControleur arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}
@@ -162,7 +172,7 @@ public class ControleurTest {
 		assertEquals(2, ctrl.getPosition());
 		ctrl.demander(new Demande(1, Sens.MONTEE));
 		ctrl.signalerChangementDEtage();
-		assertEquals(1, new Demande(1, Sens.MONTEE).etage());
+		assertEquals(1, new Demande(1, Sens.MONTEE).etage().intValue());
 		assertTrue(new Demande(1, Sens.MONTEE).enMontee());
 		assertEquals(1, ctrl.getPosition());
 		assertTrue(ctrl.getListeDemande().estVide());
