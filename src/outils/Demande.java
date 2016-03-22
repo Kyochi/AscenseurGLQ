@@ -6,6 +6,7 @@ package outils;
  *
  */
 public class Demande {
+	
 	/**
 	 * Le numéro d'étage
 	 */

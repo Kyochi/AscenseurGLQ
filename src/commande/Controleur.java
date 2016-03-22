@@ -14,6 +14,10 @@ import static org.junit.Assert.*;
  */
 public final class Controleur implements IControleur {
 	/**
+	 * Arrêt d'urgence
+	 */
+	private boolean arretUrgence = false;
+	/**
 	 * Nombre d'étage.
 	 */
 	private int nombreEtages;
@@ -184,6 +188,7 @@ public final class Controleur implements IControleur {
 	 * Enlève la demande du stock.
 	 */
 	public void enleverDuStock(final Demande d) {
+
 		getListeDemande().supprimer(d);
 	}
 
@@ -243,34 +248,36 @@ public final class Controleur implements IControleur {
 	 */
 	@Override
 	public void demander(final Demande d) {
-		demande = d;
-		System.out.println("appel " + d);
-		if (iug != null && cabine != null) {
-			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
-			if (getListeDemande().estVide()) {
-				if (d.etage() != getPosition()) {
-					iug.allumerBouton(d);
-				}
-				stocker(d);
-				MAJSens();
-				if (d.etage() > getPosition()) {
-					cabine.monter();
-				} else if (d.etage() < getPosition()) {
-					cabine.descendre();
-				}
-			} else {
-				//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
-				if ((!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
-						&& (!getListeDemande().contient(new Demande(d.etage(), Sens.MONTEE)))) {
-					iug.allumerBouton(d);
-				}
-				stocker(d);
-				MAJSens();
-				if (sens != sensPrecedent) {
+		if (!arretUrgence) {
+			demande = d;
+			System.out.println("appel " + d);
+			if (iug != null && cabine != null) {
+				// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
+				if (getListeDemande().estVide()) {
+					if (d.etage() != getPosition()) {
+						iug.allumerBouton(d);
+					}
+					stocker(d);
+					MAJSens();
 					if (d.etage() > getPosition()) {
 						cabine.monter();
 					} else if (d.etage() < getPosition()) {
 						cabine.descendre();
+					}
+				} else {
+					//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
+					if ((!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
+							&& (!getListeDemande().contient(new Demande(d.etage(), Sens.MONTEE)))) {
+						iug.allumerBouton(d);
+					}
+					stocker(d);
+					MAJSens();
+					if (sens != sensPrecedent) {
+						if (d.etage() > getPosition()) {
+							cabine.monter();
+						} else if (d.etage() < getPosition()) {
+							cabine.descendre();
+						}
 					}
 				}
 			}
@@ -288,6 +295,9 @@ public final class Controleur implements IControleur {
 			viderStock();
 			MAJSens();
 			assertEquals(sens,Sens.INDEFINI);
+			arretUrgence = true;
+		} else {
+			arretUrgence = false;
 		}
 	}
 

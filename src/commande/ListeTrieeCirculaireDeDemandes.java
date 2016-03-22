@@ -95,8 +95,11 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	public void supprimer(Object e) {
 		if(!listeTrieeCirculaire.contains(e)) {
 			throw new IllegalArgumentException();
+		}else {
+			
+			listeTrieeCirculaire.remove(e);
+			System.out.println(listeTrieeCirculaire.toString());
 		}
-		listeTrieeCirculaire.remove(e);
 	}
 
 	/**
