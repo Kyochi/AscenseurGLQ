@@ -82,8 +82,11 @@ public final class Controleur implements IControleur {
 			sens = Sens.INDEFINI;
 		} else {
 			Demande d = demande;
-			if ((Demande) listeDemande.suivantDe(demande) != null) {
-				d = (Demande) listeDemande.suivantDe(demande);
+			if(sens == sens.INDEFINI)sens = demande.sens();
+			if((position == nombreEtages-1)&& (sens == Sens.MONTEE))sens = Sens.DESCENTE;
+			if((position == 0)&& (sens == Sens.DESCENTE))sens = Sens.MONTEE;
+			if ((Demande) listeDemande.suivantDe(new Demande(position,sens)) != null) {
+				d = (Demande) listeDemande.suivantDe(new Demande(position,sens));
 			}
 			if (d.etage() > position) {
 				sens = Sens.MONTEE;
@@ -97,6 +100,7 @@ public final class Controleur implements IControleur {
 	 * Stocke la demande.
 	 */
 	public void stocker(final Demande d) {
+		System.out.println("appel "+d);
 		if (d.estIndefini()) {
 			if (((sens == Sens.MONTEE) || (sens == Sens.DESCENTE))
 					&& (d.etage() > getPosition())) {
@@ -197,6 +201,7 @@ public final class Controleur implements IControleur {
 	 * @throws Exception 
 	 */
 	public final synchronized void signalerChangementDEtage() throws Exception {
+		System.out.println(listeDemande);
 		if (cabine != null && iug != null) {
 			Demande d;
 			if ((Demande) listeDemande.suivantDe(demande) != null) {
@@ -242,11 +247,10 @@ public final class Controleur implements IControleur {
 	 */
 	@Override
 	public void demander(final Demande d) {
-		System.out.println("appel "+d);
 		if (!arretUrgence) {
 		demande = d;
 		if (iug != null && cabine != null) {
-				if ((d.etage() != getPosition()) || (!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
+				if ((d.etage() != getPosition()) && (!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
 						&& (!getListeDemande().contient(new Demande(d.etage(), Sens.MONTEE)))) {
 					iug.allumerBouton(d);
 				}
