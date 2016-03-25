@@ -72,7 +72,7 @@ public final class Controleur implements IControleur {
 	 * met sens à INDEFINI si la cabine est arrêtée,.
 	 * MONTEE si la cabine monte et DESCENTE si elle descend.
 	 */
-	synchronized public void MAJSens() {
+	public void MAJSens() {
 		if (sens != sensPrecedent) {
 			assertNotEquals(sens,sensPrecedent);
 			sensPrecedent = sens;
@@ -133,22 +133,24 @@ public final class Controleur implements IControleur {
 	 * incrémente position de 1 si sens vaut MONTEE,.
 	 * décrémente de 1 si sens vaut DESCENTE.
 	 */
-	synchronized public void MAJPosition() {
+	public void MAJPosition() {
 		if (sens == Sens.MONTEE) {
 			position = position + 1;
 			iug.changerPosition(position);
+			cabine.monter();
 			assertEquals(sens, Sens.MONTEE);
 		} else if (sens == Sens.DESCENTE) {
 			position = position - 1;
 			iug.changerPosition(position);
 			assertEquals(sens, Sens.DESCENTE);
-		}		
+			cabine.descendre();
+		}	
 	}
 
 	/**
 	 * Vide le stock des demandes.
 	 */
-	synchronized public void viderStock() {
+	 public void viderStock() {
 		getListeDemande().vider();
 		assertTrue(listeDemande.estVide());
 	}
@@ -156,7 +158,7 @@ public final class Controleur implements IControleur {
 	/**
 	 * Eteint TOUS les boutons /!\.
 	 */
-	synchronized public void eteindreTousBoutons() {
+	 public void eteindreTousBoutons() {
 		if (iug != null) {
 			if (!listeDemande.estVide()) {
 				iug.eteindreBouton(demande);
@@ -178,14 +180,14 @@ public final class Controleur implements IControleur {
 	 * renvoie la demande du stock qui vérifie certaines.
 	 * conditions par rapport à la position et au sens ou au sensPrecedent.
 	 */
-	synchronized public Demande interrogerStock() {
+	 public Demande interrogerStock() {
 		return (Demande) getListeDemande().suivantDe(demande);
 	}
 
 	/**
 	 * Enlève la demande du stock.
 	 */
-	synchronized public void enleverDuStock(final Demande d) {
+	 public void enleverDuStock(final Demande d) {
 		if(getListeDemande().contient(d))
 		getListeDemande().supprimer(d);
 	}
@@ -195,19 +197,13 @@ public final class Controleur implements IControleur {
 	 * @throws Exception 
 	 */
 	public final synchronized void signalerChangementDEtage() throws Exception {
-		/*MAJPosition();
-		System.out.println(position+""+sens);
-		Demande d1 = (Demande) listeDemande.suivantDe(new Demande(position, sens));
-		if (position == d1.etage()) { System.out.println("+++"+position+""+sens);}
-		return;*/	
-		System.out.println("x");
 		if (cabine != null && iug != null) {
 			Demande d;
 			if ((Demande) listeDemande.suivantDe(demande) != null) {
 				d = (Demande) listeDemande.suivantDe(demande);
 				if (sens == Sens.DESCENTE) {
 					if (getListeDemande().taille() > 1) {
-						//Demande d2 = (Demande) getListeDemande().suivantDe(new Demande(demande.etage()-1,demande.sens()));
+						if (position == 0)sens = sens.MONTEE;
 						Demande d2 = (Demande) getListeDemande().suivantDe(new Demande(position,sens));
 						if ((d.etage() > d2.etage())
 								&& (position > d2.etage())
@@ -217,30 +213,20 @@ public final class Controleur implements IControleur {
 						}
 					}
 				} else {
-					d = (Demande) listeDemande.suivantDe(demande);
+					if(position == nombreEtages-1)sens = Sens.DESCENTE;
+					d = (Demande) listeDemande.suivantDe(new Demande(position,sens));	
 				}
 				
 			} else {
 				d = this.demande;
-			}
-			if (position != d.etage().intValue()) {	
-				d = (Demande)listeDemande.suivantDe(new Demande(this.position,this.sens));
-				if (((sens == Sens.MONTEE) && (d.etage().intValue() == position + 1))
-						|| ((sens == Sens.DESCENTE) && (d.etage().intValue() == position - 1))) {
-					System.out.println("arret prochain niveau");
-					cabine.arreterProchainNiveau();
-					enleverDuStock(d);
-				}
-			}		
-			MAJPosition();
-			//System.out.println("signal de franchissement de palier");
+			}	
 			if (position == d.etage().intValue()){
+				cabine.arreterProchainNiveau();
 				iug.eteindreBouton(d);
 				iug.eteindreBouton(new Demande(d.etage().intValue(),Sens.INDEFINI));
-				System.out.println("eteindre"+d);
-			}
-			// Met le sens de la cabine à indéfini si il n'y a
-			// plus de demande et le sens précèdent avec le sens
+				enleverDuStock(d);
+				MAJSens();
+			}MAJPosition();
 			if (listeDemande.estVide()) {
 				assertTrue(listeDemande.estVide());
 				if (sens != sensPrecedent) {
@@ -248,9 +234,6 @@ public final class Controleur implements IControleur {
 				}
 				sens = Sens.INDEFINI;
 			}
-			System.out.println("la position courrant = " + position +" et le sens = " + sens);
-			System.out.println("la position courrant d = " + d.etage()  +" et le sens d = " + d.sens());
-			System.out.println(listeDemande);
 		}
 	}
 
@@ -259,45 +242,26 @@ public final class Controleur implements IControleur {
 	 */
 	@Override
 	public void demander(final Demande d) {
-		if(!arretUrgence){
+		if (!arretUrgence) {
 		demande = d;
-		System.out.println("appel " + d);
 		if (iug != null && cabine != null) {
-			// Si la cabine n'est pas en mouvement c.a.d si il n'y a pas de dmd
-			if (getListeDemande().estVide()) {
-				if (d.etage() != getPosition()) {
-					iug.allumerBouton(d);
-				}
-				stocker(d);
-				MAJSens();
-				if (d.etage() > getPosition()) {
-					System.out.println("ici");
-					cabine.monter();
-				} else if (d.etage() < getPosition()) {
-					System.out.println("ici desc");
-					cabine.descendre();
-				}
-			} else {
-				//si il y a déjà une demande pour l'étage demandé on allume pas le bouton
-				if ((!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
+				if ((d.etage() != getPosition()) || (!getListeDemande().contient(new Demande(d.etage(), Sens.DESCENTE)))
 						&& (!getListeDemande().contient(new Demande(d.etage(), Sens.MONTEE)))) {
 					iug.allumerBouton(d);
 				}
+				if(((position +1 == d.etage().intValue())&&(d.sens() == Sens.MONTEE))
+						||((position -1 == d.etage().intValue())) && (d.sens() == Sens.DESCENTE)){
+					cabine.arreterProchainNiveau();
+				}
 				stocker(d);
 				MAJSens();
-				if (sens != sensPrecedent) {
-					if (d.etage() > getPosition()) {
-						System.out.println("la");
-						cabine.monter();
-					} else if (d.etage() < getPosition()) {
-						System.out.println("la desc");
-						cabine.descendre();
-					}
+				try {
+					signalerChangementDEtage();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}
 		}
-		System.out.println(sens);
-		System.out.println(listeDemande);
 		}
 	}
 
