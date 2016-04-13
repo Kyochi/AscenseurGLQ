@@ -2,7 +2,10 @@ package commande;
 
 
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import outils.Demande;
 import outils.DemandeComparator;
@@ -14,6 +17,35 @@ import outils.Sens;
  */
 public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 
+	public static HashMap<Integer, Long> maptimers = new HashMap<Integer, Long>();
+	public static ArrayList<Long> listTempsAttente = new ArrayList<Long>();
+	public static Long tempsAttenteMoyen;
+	
+	/**
+	 * Méthode permettant le calcul/stockage des temps d'attente et du calcul du temps d'attente moyen depuis le 
+	 * le démarrage de l'ascenseur
+	 * @param etageServi etage qui vient d'être desservi par l'ascenseur
+	 */
+	public static void calculTempsAttente(int etageServi) {
+		
+		if (maptimers.containsKey(etageServi)) {
+			// stockage du temps en seconde
+			long tempsAttente = (System.currentTimeMillis() ) - maptimers.get(etageServi);
+			listTempsAttente.add(tempsAttente);
+			
+			// Calcul moyenne temps d'attente
+			long totalTime = 0;
+			for (Long temps : listTempsAttente) {
+				totalTime +=temps;
+			}
+			
+			tempsAttenteMoyen = totalTime / listTempsAttente.size();
+			
+			maptimers.remove(etageServi);
+			System.out.println("Le temps d'attente moyen actuel est de : " + tempsAttenteMoyen);
+		}
+	}
+	
 	private CircularList<Demande> listeTrieeCirculaire;
 
 	/**
@@ -84,6 +116,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 			return;
 		}
 		listeTrieeCirculaire.add((Demande)e);
+		
 		Collections.sort(listeTrieeCirculaire, new DemandeComparator());
 	}
 
@@ -109,6 +142,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 	 */
 	@Override
 	public Object suivantDe(Object courant) {
+		
 		if(listeTrieeCirculaire.size() <= 0) return null;
 		if(listeTrieeCirculaire.contains(courant)) {
 			return listeTrieeCirculaire.get(listeTrieeCirculaire.indexOf(courant));
@@ -120,6 +154,7 @@ public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire{
 			liste.inserer(courant);
 			return liste.listeTrieeCirculaire.get(liste.listeTrieeCirculaire.indexOf(courant)+1);
 		}
+		
 	}
 	/**
 	 * Redéfinition de la méthode toString 

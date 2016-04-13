@@ -122,7 +122,10 @@ public final class Controleur implements IControleur {
 			} else if (d.etage() == 0) {
 				d.changeSens(Sens.MONTEE);
 			}
+
 		}
+		// Stockage de l'étage et du temps au moment de l'appel.
+		ListeTrieeCirculaireDeDemandes.maptimers.put(position, System.currentTimeMillis() );
 		getListeDemande().inserer(d);
 		if (iug != null) {
 			if (getPosition() == d.etage()) {
@@ -200,12 +203,16 @@ public final class Controleur implements IControleur {
 	 * Signale le changement d'étage.
 	 * @throws Exception 
 	 */
-	public final synchronized void signalerChangementDEtage() throws Exception {
+	public final synchronized void signalerChangementDEtage()  {
 		System.out.println(listeDemande);
 		if (cabine != null && iug != null) {
 			Demande d;
+			
+			// On regarde si l'étage est dans la liste des étages demandé et on calcule le temps d'attente
+			ListeTrieeCirculaireDeDemandes.calculTempsAttente(position);
 			if ((Demande) listeDemande.suivantDe(demande) != null) {
 				d = (Demande) listeDemande.suivantDe(demande);
+				
 				if (sens == Sens.DESCENTE) {
 					if (getListeDemande().taille() > 1) {
 						if (position == 0)sens = sens.MONTEE;
@@ -226,6 +233,7 @@ public final class Controleur implements IControleur {
 				d = this.demande;
 			}	
 			if (position == d.etage().intValue()){
+				
 				cabine.arreterProchainNiveau();
 				iug.eteindreBouton(d);
 				iug.eteindreBouton(new Demande(d.etage().intValue(),Sens.INDEFINI));

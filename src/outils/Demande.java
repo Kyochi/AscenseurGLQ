@@ -30,6 +30,7 @@ public class Demande {
 	 * @param montee , le sens de monté
 	 */
 	public Demande(int etage, Sens montee) {
+		
 		numEtage = etage;
 		sens = montee;
 	}
