@@ -1,3 +1,3 @@
 # AscenseurGLQ
 
-Project of software engineering, Master 1.
+Software engineering project, Master 1.
